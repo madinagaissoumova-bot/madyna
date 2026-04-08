@@ -413,7 +413,9 @@ export default function HomePage() {
                       className={`product-visual ${product.images?.length ? "" : product.visualClass}`.trim()}
                       style={
                         product.images?.length
-                          ? { backgroundImage: `url("${product.images[0].src}")` }
+                          ? {
+                              backgroundImage: `url("${product.cardImageSrc || product.images[0].src}")`
+                            }
                           : undefined
                       }
                     ></div>
