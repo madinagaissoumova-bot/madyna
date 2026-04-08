@@ -373,21 +373,21 @@ export default function HomePage() {
             <div className="categories-grid">
               <article className="category-card">
                 <span className="category-index">01</span>
-                <span className="category-tag">{isEnglish ? "Everyday elegance" : "Elegance quotidienne"}</span>
-                <h3>{isEnglish ? "Contemporary abayas" : "Abayas contemporaines"}</h3>
-                <p>{isEnglish ? "Long, airy cuts for busy days with style and ease." : "Des coupes longues et aeriennes pour des journees rythmees avec style et aisance."}</p>
+                <span className="category-tag">{isEnglish ? "Signature tones" : "Tons signature"}</span>
+                <h3>{isEnglish ? "Deep and elegant abayas" : "Abayas profondes et elegantes"}</h3>
+                <p>{isEnglish ? "Fluid silhouettes in cocoa, black and petrol blue for a refined and confident presence." : "Des silhouettes fluides dans des tons cacao, noir et bleu petrole pour une allure raffinee et assuree."}</p>
               </article>
               <article className="category-card">
                 <span className="category-index">02</span>
-                <span className="category-tag">{isEnglish ? "House signature" : "Signature maison"}</span>
-                <h3>{isEnglish ? "Matching sets" : "Ensembles coordonnes"}</h3>
-                <p>{isEnglish ? "Harmonious silhouettes to wear together or separately, always polished." : "Des silhouettes harmonieuses a porter ensemble ou separement, toujours impeccables."}</p>
+                <span className="category-tag">{isEnglish ? "Soft shades" : "Nuances douces"}</span>
+                <h3>{isEnglish ? "Light and luminous abayas" : "Abayas claires et lumineuses"}</h3>
+                <p>{isEnglish ? "Sky blue and soft tones designed for an airy, calm and feminine silhouette." : "Des teintes ciel et lumineuses pensees pour une silhouette aerienne, douce et feminine."}</p>
               </article>
               <article className="category-card">
                 <span className="category-index">03</span>
-                <span className="category-tag">{isEnglish ? "Delicate finishes" : "Finitions delicates"}</span>
-                <h3>{isEnglish ? "Premium hijabs" : "Hijabs premium"}</h3>
-                <p>{isEnglish ? "Chiffon, premium jersey and satin textures in a soft timeless palette." : "Mousseline, jersey luxe et textures satinees dans une palette douce et intemporelle."}</p>
+                <span className="category-tag">{isEnglish ? "Printed details" : "Imprimes delicats"}</span>
+                <h3>{isEnglish ? "Graphic and floral patterns" : "Motifs graphiques et floraux"}</h3>
+                <p>{isEnglish ? "Polka dots, powder pink lines and textured prints that give each piece its own character." : "Pois, lignes rose poudree et textures imprimees qui donnent du caractere a chaque piece."}</p>
               </article>
             </div>
           </div>
