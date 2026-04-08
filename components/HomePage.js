@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import LanguageToggle from "./LanguageToggle";
 import { heroSlides, products } from "../lib/store";
 import { useStore } from "./StoreProvider";
 
@@ -9,18 +10,24 @@ const testimonials = [
   {
     quote:
       "Des que je l'ai portee, j'ai senti la difference. La coupe est sublime, le tombe est magnifique et l'allure est immediatement tres chic.",
+    quoteEn:
+      "As soon as I wore it, I felt the difference. The cut is stunning, the drape is beautiful and the look feels instantly chic.",
     name: "Samira B.",
     city: "Paris"
   },
   {
     quote:
       "On sent un vrai travail de maison de mode. Les finitions sont delicates, les couleurs sont raffinees et chaque piece inspire l'elegance.",
+    quoteEn:
+      "You can feel true fashion-house craftsmanship. The finishes are delicate, the colors refined and every piece inspires elegance.",
     name: "Amina K.",
     city: "Lyon"
   },
   {
     quote:
       "Tout est soigne, du vetement jusqu'a la presentation. L'experience est elegante du debut a la fin, et la qualite est vraiment au rendez-vous.",
+    quoteEn:
+      "Everything is carefully done, from the garment to the presentation. The whole experience feels elegant from start to finish, and the quality is truly there.",
     name: "Maryam D.",
     city: "Bruxelles"
   }
@@ -41,8 +48,18 @@ export default function HomePage() {
     changeCartQuantity,
     removeFromCart,
     clearCart,
-    showToast
+    showToast,
+    language
   } = useStore();
+  const isEnglish = language === "en";
+  const navItems = [
+    ["accueil", isEnglish ? "Home" : "Accueil"],
+    ["categories", isEnglish ? "Collections" : "Collections"],
+    ["produits", isEnglish ? "Featured Pieces" : "Pieces phares"],
+    ["a-propos", isEnglish ? "About" : "Maison"],
+    ["avis", isEnglish ? "Reviews" : "Avis"],
+    ["contact", isEnglish ? "Contact" : "Contact"]
+  ];
   const [mobileOpen, setMobileOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -109,7 +126,7 @@ export default function HomePage() {
     addToCart(product);
     setAccountOpen(false);
     setCartOpen(true);
-    showToast(`${product.name} a ete ajoute au panier.`);
+    showToast(isEnglish ? `${product.name} has been added to your cart.` : `${product.name} a ete ajoute au panier.`);
   }
 
   function handleAccountSubmit(event) {
@@ -120,17 +137,21 @@ export default function HomePage() {
 
     if (!isValidEmail(email) || !password) {
       setAccountMessage({
-        text: "Merci de renseigner un e-mail valide et votre mot de passe.",
+        text: isEnglish
+          ? "Please enter a valid email and your password."
+          : "Merci de renseigner un e-mail valide et votre mot de passe.",
         type: "error"
       });
       return;
     }
 
     setAccountMessage({
-      text: "Connexion de demonstration validee. Votre espace cliente sera bientot disponible.",
+      text: isEnglish
+        ? "Demo sign-in confirmed. Your customer area will be available soon."
+        : "Connexion de demonstration validee. Votre espace cliente sera bientot disponible.",
       type: "success"
     });
-    showToast("Connexion cliente simulee avec succes.");
+    showToast(isEnglish ? "Demo sign-in successful." : "Connexion cliente simulee avec succes.");
   }
 
   function handleNewsletterSubmit(event) {
@@ -140,7 +161,7 @@ export default function HomePage() {
 
     if (!email) {
       setNewsletterMessage({
-        text: "Veuillez renseigner votre adresse e-mail.",
+        text: isEnglish ? "Please enter your email address." : "Veuillez renseigner votre adresse e-mail.",
         type: "error"
       });
       return;
@@ -148,7 +169,7 @@ export default function HomePage() {
 
     if (!isValidEmail(email)) {
       setNewsletterMessage({
-        text: "Veuillez entrer une adresse e-mail valide.",
+        text: isEnglish ? "Please enter a valid email address." : "Veuillez entrer une adresse e-mail valide.",
         type: "error"
       });
       return;
@@ -156,10 +177,12 @@ export default function HomePage() {
 
     event.currentTarget.reset();
     setNewsletterMessage({
-      text: "Merci, votre inscription a la newsletter a bien ete prise en compte.",
+      text: isEnglish
+        ? "Thank you, your newsletter subscription has been confirmed."
+        : "Merci, votre inscription a la newsletter a bien ete prise en compte.",
       type: "success"
     });
-    showToast("Inscription newsletter confirmee.");
+    showToast(isEnglish ? "Newsletter subscription confirmed." : "Inscription newsletter confirmee.");
   }
 
   function handleContactSubmit(event) {
@@ -173,7 +196,9 @@ export default function HomePage() {
 
     if (!isValid) {
       setContactMessage({
-        text: "Merci de completer correctement tous les champs du formulaire.",
+        text: isEnglish
+          ? "Please complete all form fields correctly."
+          : "Merci de completer correctement tous les champs du formulaire.",
         type: "error"
       });
       return;
@@ -181,10 +206,12 @@ export default function HomePage() {
 
     event.currentTarget.reset();
     setContactMessage({
-      text: "Votre message a bien ete envoye. Nous vous repondrons tres prochainement.",
+      text: isEnglish
+        ? "Your message has been sent. We will get back to you very soon."
+        : "Votre message a bien ete envoye. Nous vous repondrons tres prochainement.",
       type: "success"
     });
-    showToast("Message envoye avec succes.");
+    showToast(isEnglish ? "Message sent successfully." : "Message envoye avec succes.");
   }
 
   return (
@@ -214,14 +241,7 @@ export default function HomePage() {
 
           <nav className={`site-nav${mobileOpen ? " is-open" : ""}`} id="site-nav" aria-label="Navigation principale">
             <ul>
-              {[
-                ["accueil", "Accueil"],
-                ["categories", "Collections"],
-                ["produits", "Pieces phares"],
-                ["a-propos", "Maison"],
-                ["avis", "Avis"],
-                ["contact", "Contact"]
-              ].map(([id, label]) => (
+              {navItems.map(([id, label]) => (
                 <li key={id}>
                   <a href={`#${id}`} onClick={(event) => scrollToSection(event, id)}>
                     {label}
@@ -232,6 +252,7 @@ export default function HomePage() {
           </nav>
 
           <div className="header-actions">
+            <LanguageToggle />
             <button
               className="account-button"
               type="button"
@@ -243,7 +264,7 @@ export default function HomePage() {
                 setAccountOpen(true);
               }}
             >
-              Connexion
+              {isEnglish ? "Sign in" : "Connexion"}
             </button>
             <button
               className="cart-button"
@@ -256,7 +277,7 @@ export default function HomePage() {
                 setCartOpen((current) => !current);
               }}
             >
-              <span className="cart-button-label">Panier</span>
+              <span className="cart-button-label">{isEnglish ? "Cart" : "Panier"}</span>
               <span className="cart-count">{totalQuantity}</span>
             </button>
           </div>
@@ -267,17 +288,17 @@ export default function HomePage() {
         <section className="hero section" id="accueil">
           <div className="container hero-grid">
             <div className="hero-content">
-              <p className="eyebrow">Maison de mode modeste</p>
-              <p className="hero-kicker">Capsule studio 2026</p>
-              <h1>Le raffinement modeste pense comme une signature de style.</h1>
+              <p className="eyebrow">{isEnglish ? "Modest fashion house" : "Maison de mode modeste"}</p>
+              <p className="hero-kicker">{isEnglish ? "Studio capsule 2026" : "Capsule studio 2026"}</p>
+              <h1>{isEnglish ? "Refined modestwear designed as a true style signature." : "Le raffinement modeste pense comme une signature de style."}</h1>
               <p className="hero-text">
-                Mady Mode imagine des abayas et silhouettes voilees a l'allure couture,
-                entre douceur poudree, lignes fluides et elegance contemporaine inspiree
-                des plus belles adresses de Dubai.
+                {isEnglish
+                  ? "Mady Mode imagines abayas and veiled silhouettes with couture spirit, blending soft tones, fluid lines and contemporary elegance inspired by the most beautiful addresses in Dubai."
+                  : "Mady Mode imagine des abayas et silhouettes voilees a l'allure couture, entre douceur poudree, lignes fluides et elegance contemporaine inspiree des plus belles adresses de Dubai."}
               </p>
               <div className="hero-actions">
                 <a href="#produits" className="button button-primary" onClick={(event) => scrollToSection(event, "produits")}>
-                  Decouvrir la collection
+                  {isEnglish ? "Discover the collection" : "Decouvrir la collection"}
                 </a>
                 <a
                   href="https://wa.me/336184002819?text=Bonjour%20Mady%20Mode%2C%20je%20souhaite%20obtenir%20des%20informations%20sur%20vos%20articles."
@@ -285,13 +306,22 @@ export default function HomePage() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Ecrire sur WhatsApp
+                  {isEnglish ? "Chat on WhatsApp" : "Ecrire sur WhatsApp"}
                 </a>
               </div>
               <ul className="hero-highlights">
-                <li>Capsules exclusives</li>
-                <li>Finitions couture</li>
-                <li>Livraison offerte des 120 EUR</li>
+                <li>
+                  <strong>{isEnglish ? "Exclusive capsules" : "Capsules exclusives"}</strong>
+                  <span>{isEnglish ? "Small-series editions." : "Editions pensees en petite serie."}</span>
+                </li>
+                <li>
+                  <strong>{isEnglish ? "Couture finishes" : "Finitions couture"}</strong>
+                  <span>{isEnglish ? "Delicate details and fluid lines." : "Details delicats et lignes fluides."}</span>
+                </li>
+                <li>
+                  <strong>{isEnglish ? "Free delivery" : "Livraison offerte"}</strong>
+                  <span>{isEnglish ? "From 120 EUR in France." : "Des 120 EUR d'achat en France."}</span>
+                </li>
               </ul>
             </div>
 
@@ -300,26 +330,26 @@ export default function HomePage() {
                 <div className="hero-slides">
                   {heroSlides.map((slide, index) => (
                     <div key={slide.src} className={`hero-slide${index === heroIndex ? " is-active" : ""}`}>
-                      <img src={slide.src} alt={slide.alt} />
+                      <img src={slide.src} alt={isEnglish ? slide.altEn || slide.alt : slide.alt} />
                     </div>
                   ))}
                 </div>
                 <div className="hero-carousel-controls">
-                  <button className="hero-control hero-control-prev" type="button" aria-label="Image precedente" onClick={() => setHeroIndex((heroIndex - 1 + heroSlides.length) % heroSlides.length)}>
+                  <button className="hero-control hero-control-prev" type="button" aria-label={isEnglish ? "Previous image" : "Image precedente"} onClick={() => setHeroIndex((heroIndex - 1 + heroSlides.length) % heroSlides.length)}>
                     ‹
                   </button>
-                  <div className="hero-dots" aria-label="Navigation du carrousel">
+                  <div className="hero-dots" aria-label={isEnglish ? "Carousel navigation" : "Navigation du carrousel"}>
                     {heroSlides.map((slide, index) => (
                       <button
                         key={slide.src}
                         className={`hero-dot${index === heroIndex ? " is-active" : ""}`}
                         type="button"
-                        aria-label={`Aller a l'image ${index + 1}`}
+                        aria-label={isEnglish ? `Go to image ${index + 1}` : `Aller a l'image ${index + 1}`}
                         onClick={() => setHeroIndex(index)}
                       ></button>
                     ))}
                   </div>
-                  <button className="hero-control hero-control-next" type="button" aria-label="Image suivante" onClick={() => setHeroIndex((heroIndex + 1) % heroSlides.length)}>
+                  <button className="hero-control hero-control-next" type="button" aria-label={isEnglish ? "Next image" : "Image suivante"} onClick={() => setHeroIndex((heroIndex + 1) % heroSlides.length)}>
                     ›
                   </button>
                 </div>
@@ -331,29 +361,33 @@ export default function HomePage() {
         <section className="categories section" id="categories">
           <div className="container">
             <div className="section-heading">
-              <p className="eyebrow">Collections</p>
-              <h2>Des lignes pensees pour chaque moment de vie</h2>
+              <p className="eyebrow">{isEnglish ? "Collections" : "Collections"}</p>
+              <h2>{isEnglish ? "Lines designed for every moment of life" : "Des lignes pensees pour chaque moment de vie"}</h2>
               <p>
-                Une garde-robe complete, entre essentiels epures et pieces
-                signature pour les occasions les plus precieuses.
+                {isEnglish
+                  ? "A complete wardrobe shaped by clean essentials and signature pieces for the most precious occasions."
+                  : "Une garde-robe complete, entre essentiels epures et pieces signature pour les occasions les plus precieuses."}
               </p>
             </div>
 
             <div className="categories-grid">
               <article className="category-card">
-                <span className="category-tag">Elegance quotidienne</span>
-                <h3>Abayas contemporaines</h3>
-                <p>Des coupes longues et aeriennes pour des journees rythmees avec style et aisance.</p>
+                <span className="category-index">01</span>
+                <span className="category-tag">{isEnglish ? "Everyday elegance" : "Elegance quotidienne"}</span>
+                <h3>{isEnglish ? "Contemporary abayas" : "Abayas contemporaines"}</h3>
+                <p>{isEnglish ? "Long, airy cuts for busy days with style and ease." : "Des coupes longues et aeriennes pour des journees rythmees avec style et aisance."}</p>
               </article>
               <article className="category-card">
-                <span className="category-tag">Signature maison</span>
-                <h3>Ensembles coordonnes</h3>
-                <p>Des silhouettes harmonieuses a porter ensemble ou separement, toujours impeccables.</p>
+                <span className="category-index">02</span>
+                <span className="category-tag">{isEnglish ? "House signature" : "Signature maison"}</span>
+                <h3>{isEnglish ? "Matching sets" : "Ensembles coordonnes"}</h3>
+                <p>{isEnglish ? "Harmonious silhouettes to wear together or separately, always polished." : "Des silhouettes harmonieuses a porter ensemble ou separement, toujours impeccables."}</p>
               </article>
               <article className="category-card">
-                <span className="category-tag">Finitions delicates</span>
-                <h3>Hijabs premium</h3>
-                <p>Mousseline, jersey luxe et textures satinees dans une palette douce et intemporelle.</p>
+                <span className="category-index">03</span>
+                <span className="category-tag">{isEnglish ? "Delicate finishes" : "Finitions delicates"}</span>
+                <h3>{isEnglish ? "Premium hijabs" : "Hijabs premium"}</h3>
+                <p>{isEnglish ? "Chiffon, premium jersey and satin textures in a soft timeless palette." : "Mousseline, jersey luxe et textures satinees dans une palette douce et intemporelle."}</p>
               </article>
             </div>
           </div>
@@ -362,27 +396,52 @@ export default function HomePage() {
         <section className="products section" id="produits">
           <div className="container">
             <div className="section-heading">
-              <p className="eyebrow">Pieces phares</p>
-              <h2>La selection Mady Mode</h2>
+              <p className="eyebrow">{isEnglish ? "Featured pieces" : "Pieces phares"}</p>
+              <h2>{isEnglish ? "Current selection" : "La selection du moment"}</h2>
               <p>
-                Neuf creations selectionnees pour refleter l'allure couture de Mady Mode :
-                abayas signature, capsules elegantes et voiles premium aux finitions delicates.
+                {isEnglish
+                  ? "We add products progressively. Find the pieces currently available here."
+                  : "Nous ajoutons les produits au fur et a mesure. Retrouvez ici les pieces actuellement disponibles."}
               </p>
             </div>
 
             <div className="products-grid">
               {products.map((product) => (
                 <article className="product-card" key={product.id}>
-                  <div className={`product-visual ${product.visualClass}`}></div>
+                  <Link href={`/produit/${product.id}`} className="product-card-link" aria-label={`Voir la fiche de ${product.name}`}>
+                    <div
+                      className={`product-visual ${product.images?.length ? "" : product.visualClass}`.trim()}
+                      style={
+                        product.images?.length
+                          ? { backgroundImage: `url("${product.images[0].src}")` }
+                          : undefined
+                      }
+                    ></div>
+                  </Link>
                   <div className="product-body">
-                    <p className="product-category">{product.category}</p>
-                    <h3>{product.name}</h3>
-                    <p>{product.description}</p>
+                    <div className="product-head">
+                      <p className="product-category">{isEnglish ? product.categoryEn || product.category : product.category}</p>
+                      <span className="product-badge">{isEnglish ? "Available" : "Disponible"}</span>
+                    </div>
+                    <h3>
+                      <Link href={`/produit/${product.id}`} className="product-title-link">
+                        {product.name}
+                      </Link>
+                    </h3>
+                    <p>{isEnglish ? product.descriptionEn || product.description : product.description}</p>
                     <div className="product-footer">
-                      <strong>{formatPrice(product.price)}</strong>
-                      <button className="add-to-cart" type="button" onClick={() => handleAddToCart(product)}>
-                        Ajouter au panier
-                      </button>
+                      <div className="product-price-block">
+                        <strong>{formatPrice(product.price)}</strong>
+                        <span>{isEnglish ? "Size guidance on request" : "Conseil taille sur demande"}</span>
+                      </div>
+                      <div className="product-card-actions">
+                        <Link href={`/produit/${product.id}`} className="button button-secondary product-detail-link">
+                          {isEnglish ? "View product" : "Voir le produit"}
+                        </Link>
+                        <button className="add-to-cart" type="button" onClick={() => handleAddToCart(product)}>
+                          {isEnglish ? "Add" : "Ajouter"}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -394,19 +453,20 @@ export default function HomePage() {
         <section className="benefits section">
           <div className="container benefits-grid">
             <div className="section-heading align-left">
-              <p className="eyebrow">Pourquoi nous choisir</p>
-              <h2>Le soin d'une maison qui valorise l'allure et le confort</h2>
+              <p className="eyebrow">{isEnglish ? "Why choose us" : "Pourquoi nous choisir"}</p>
+              <h2>{isEnglish ? "The care of a house that values elegance and comfort" : "Le soin d'une maison qui valorise l'allure et le confort"}</h2>
               <p>
-                Chaque detail a ete pense pour offrir une experience sereine, du
-                choix des matieres jusqu'a la reception de votre commande.
+                {isEnglish
+                  ? "Every detail has been designed to offer a serene experience, from fabric selection to order delivery."
+                  : "Chaque detail a ete pense pour offrir une experience sereine, du choix des matieres jusqu'a la reception de votre commande."}
               </p>
             </div>
 
             <div className="benefits-list">
-              <article className="benefit-card"><h3>Matieres choisies</h3><p>Des tissus au tombe elegant, confortables a porter et agreables toute la journee.</p></article>
-              <article className="benefit-card"><h3>Finitions soignees</h3><p>Coutures nettes, palettes raffinees et coupes harmonieuses pour une allure irreprochable.</p></article>
-              <article className="benefit-card"><h3>Conseil personnalise</h3><p>Une equipe disponible pour vous guider selon votre style, votre taille et vos envies.</p></article>
-              <article className="benefit-card"><h3>Expedition delicate</h3><p>Vos pieces sont preparees avec attention dans un ecrin sobre et elegant.</p></article>
+              <article className="benefit-card"><h3>{isEnglish ? "Selected fabrics" : "Matieres choisies"}</h3><p>{isEnglish ? "Elegant drape fabrics, comfortable to wear and pleasant all day long." : "Des tissus au tombe elegant, confortables a porter et agreables toute la journee."}</p></article>
+              <article className="benefit-card"><h3>{isEnglish ? "Careful finishes" : "Finitions soignees"}</h3><p>{isEnglish ? "Clean seams, refined palettes and harmonious cuts for an impeccable look." : "Coutures nettes, palettes raffinees et coupes harmonieuses pour une allure irreprochable."}</p></article>
+              <article className="benefit-card"><h3>{isEnglish ? "Personal advice" : "Conseil personalise"}</h3><p>{isEnglish ? "A team available to guide you according to your style, size and preferences." : "Une equipe disponible pour vous guider selon votre style, votre taille et vos envies."}</p></article>
+              <article className="benefit-card"><h3>{isEnglish ? "Careful shipping" : "Expedition delicate"}</h3><p>{isEnglish ? "Your pieces are prepared with care in a refined and elegant package." : "Vos pieces sont preparees avec attention dans un ecrin sobre et elegant."}</p></article>
             </div>
           </div>
         </section>
@@ -416,26 +476,28 @@ export default function HomePage() {
             <div className="about-visual">
               <div className="about-frame">
                 <img
-                  src="https://images.pexels.com/photos/29188564/pexels-photo-29188564.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                  alt="Modele voilee portant une abaya elegante beige dans un style premium"
+                  src="/products/abaya-nila-bleu-ciel/1.jpeg"
+                  alt={isEnglish ? "Abaya Nila Bleu Ciel worn in a soft elegant setting" : "Abaya Nila Bleu Ciel portee dans une ambiance douce et elegante"}
                   className="about-image"
                 />
                 <p className="about-caption">Mady Mode</p>
               </div>
             </div>
             <div className="about-content">
-              <p className="eyebrow">A propos</p>
-              <h2>Une maison de mode modeste pensee comme un vestiaire d'elegance contemporaine</h2>
+              <p className="eyebrow">{isEnglish ? "About" : "A propos"}</p>
+              <h2>{isEnglish ? "A modest fashion house imagined as a wardrobe of contemporary elegance" : "Une maison de mode modeste pensee comme un vestiaire d'elegance contemporaine"}</h2>
               <p>
-                Mady Mode celebre une vision raffinee de la feminite, ou la pudeur
-                rencontre l'allure, la douceur et l'exigence des belles matieres.
+                {isEnglish
+                  ? "Mady Mode celebrates a refined vision of femininity where modesty meets elegance, softness and beautiful fabrics."
+                  : "Mady Mode celebre une vision raffinee de la feminite, ou la pudeur rencontre l'allure, la douceur et l'exigence des belles matieres."}
               </p>
               <p>
-                Nos pieces sont concues pour offrir un equilibre precieux entre
-                confort absolu, qualite durable et sophistication discrete.
+                {isEnglish
+                  ? "Our pieces are designed to offer a precious balance between absolute comfort, lasting quality and understated sophistication."
+                  : "Nos pieces sont concues pour offrir un equilibre precieux entre confort absolu, qualite durable et sophistication discrete."}
               </p>
               <a href="#contact" className="button button-primary" onClick={(event) => scrollToSection(event, "contact")}>
-                Prendre contact
+                {isEnglish ? "Get in touch" : "Prendre contact"}
               </a>
             </div>
           </div>
@@ -444,19 +506,19 @@ export default function HomePage() {
         <section className="testimonials section" id="avis">
           <div className="container">
             <div className="section-heading">
-              <p className="eyebrow">Avis clientes</p>
-              <h2>Ce que nos clientes ressentent en decouvrant l'univers Mady Mode</h2>
+              <p className="eyebrow">{isEnglish ? "Customer reviews" : "Avis clientes"}</p>
+              <h2>{isEnglish ? "What our customers feel when discovering the Mady Mode universe" : "Ce que nos clientes ressentent en decouvrant l'univers Mady Mode"}</h2>
               <p>
-                Des mots sinceres sur la qualite des coupes, la noblesse des
-                matieres et cette sensation rare de se sentir a la fois elegante,
-                confiante et pleinement soi-meme.
+                {isEnglish
+                  ? "Sincere words about the quality of the cuts, the beauty of the fabrics and that rare feeling of being elegant, confident and fully yourself."
+                  : "Des mots sinceres sur la qualite des coupes, la noblesse des matieres et cette sensation rare de se sentir a la fois elegante, confiante et pleinement soi-meme."}
               </p>
             </div>
 
             <div className="testimonials-grid">
               {testimonials.map((testimonial) => (
                 <article className="testimonial-card" key={testimonial.name}>
-                  <p>"{testimonial.quote}"</p>
+                  <p>"{isEnglish ? testimonial.quoteEn || testimonial.quote : testimonial.quote}"</p>
                   <strong>{testimonial.name}</strong>
                   <span>{testimonial.city}</span>
                 </article>
@@ -468,18 +530,19 @@ export default function HomePage() {
         <section className="newsletter section" id="newsletter">
           <div className="container newsletter-card">
             <div>
-              <p className="eyebrow">Newsletter</p>
-              <h2>Recevez en avant-premiere nos capsules, nouveautes et inspirations</h2>
+              <p className="eyebrow">{isEnglish ? "Newsletter" : "Newsletter"}</p>
+              <h2>{isEnglish ? "Receive our capsules, new arrivals and inspirations first" : "Recevez en avant-premiere nos capsules, nouveautes et inspirations"}</h2>
               <p>
-                Inscrivez-vous pour decouvrir les lancements exclusifs, les
-                reassorts les plus attendus et l'univers raffine de Mady Mode avant tout le monde.
+                {isEnglish
+                  ? "Subscribe to discover exclusive launches, the most awaited restocks and the refined world of Mady Mode before everyone else."
+                  : "Inscrivez-vous pour decouvrir les lancements exclusifs, les reassorts les plus attendus et l'univers raffine de Mady Mode avant tout le monde."}
               </p>
             </div>
 
             <form className="newsletter-form" onSubmit={handleNewsletterSubmit} noValidate>
-              <label className="sr-only" htmlFor="newsletter-email">Adresse e-mail</label>
-              <input type="email" id="newsletter-email" name="newsletter-email" placeholder="Votre adresse e-mail" required />
-              <button type="submit" className="button button-primary">S'inscrire</button>
+              <label className="sr-only" htmlFor="newsletter-email">{isEnglish ? "Email address" : "Adresse e-mail"}</label>
+              <input type="email" id="newsletter-email" name="newsletter-email" placeholder={isEnglish ? "Your email address" : "Votre adresse e-mail"} required />
+              <button type="submit" className="button button-primary">{isEnglish ? "Subscribe" : "S'inscrire"}</button>
               <p className={`form-message${newsletterMessage.type ? ` ${newsletterMessage.type}` : ""}`} aria-live="polite">
                 {newsletterMessage.text}
               </p>
@@ -490,9 +553,9 @@ export default function HomePage() {
         <section className="contact section" id="contact">
           <div className="container contact-grid">
             <div className="contact-copy">
-              <p className="eyebrow">Contact</p>
-              <h2>Parlons de votre prochaine silhouette</h2>
-              <p>Une question sur une taille, une matiere ou une commande ? Ecrivez-nous.</p>
+              <p className="eyebrow">{isEnglish ? "Contact" : "Contact"}</p>
+              <h2>{isEnglish ? "Let’s talk about your next silhouette" : "Parlons de votre prochaine silhouette"}</h2>
+              <p>{isEnglish ? "A question about size, fabric or an order? Write to us." : "Une question sur une taille, une matiere ou une commande ? Ecrivez-nous."}</p>
               <ul className="contact-details">
                 <li>Studio Mady Mode, 24 rue des Ateliers, 75003 Paris</li>
                 <li>contact@madymode.com</li>
@@ -502,12 +565,12 @@ export default function HomePage() {
 
             <form className="contact-form" onSubmit={handleContactSubmit} noValidate>
               <div className="form-row">
-                <div className="form-field"><label htmlFor="name">Nom complet</label><input type="text" id="name" name="name" required /></div>
-                <div className="form-field"><label htmlFor="email">Adresse e-mail</label><input type="email" id="email" name="email" required /></div>
+                <div className="form-field"><label htmlFor="name">{isEnglish ? "Full name" : "Nom complet"}</label><input type="text" id="name" name="name" required /></div>
+                <div className="form-field"><label htmlFor="email">{isEnglish ? "Email address" : "Adresse e-mail"}</label><input type="email" id="email" name="email" required /></div>
               </div>
-              <div className="form-field"><label htmlFor="subject">Sujet</label><input type="text" id="subject" name="subject" required /></div>
-              <div className="form-field"><label htmlFor="message">Message</label><textarea id="message" name="message" rows="6" placeholder="Decrivez votre demande..." required></textarea></div>
-              <button type="submit" className="button button-primary">Envoyer le message</button>
+              <div className="form-field"><label htmlFor="subject">{isEnglish ? "Subject" : "Sujet"}</label><input type="text" id="subject" name="subject" required /></div>
+              <div className="form-field"><label htmlFor="message">{isEnglish ? "Message" : "Message"}</label><textarea id="message" name="message" rows="6" placeholder={isEnglish ? "Describe your request..." : "Decrivez votre demande..."} required></textarea></div>
+              <button type="submit" className="button button-primary">{isEnglish ? "Send message" : "Envoyer le message"}</button>
               <p className={`form-message${contactMessage.type ? ` ${contactMessage.type}` : ""}`} aria-live="polite">
                 {contactMessage.text}
               </p>
@@ -523,65 +586,69 @@ export default function HomePage() {
               <span className="logo-mark">M</span>
               <span className="logo-text"><strong>Mady Mode</strong><span>Mode modeste</span></span>
             </a>
-            <p>Une boutique de vetements modestes pensee comme un vestiaire precieux, feminin et contemporain.</p>
+            <p>{isEnglish ? "A modest fashion boutique imagined as a precious, feminine and contemporary wardrobe." : "Une boutique de vetements modestes pensee comme un vestiaire precieux, feminin et contemporain."}</p>
           </div>
           <div>
-            <h3>Navigation</h3>
+            <h3>{isEnglish ? "Navigation" : "Navigation"}</h3>
             <ul>
-              <li><a href="#categories" onClick={(event) => scrollToSection(event, "categories")}>Collections</a></li>
-              <li><a href="#produits" onClick={(event) => scrollToSection(event, "produits")}>Produits</a></li>
-              <li><a href="#a-propos" onClick={(event) => scrollToSection(event, "a-propos")}>A propos</a></li>
+              <li><a href="#categories" onClick={(event) => scrollToSection(event, "categories")}>{isEnglish ? "Collections" : "Collections"}</a></li>
+              <li><a href="#produits" onClick={(event) => scrollToSection(event, "produits")}>{isEnglish ? "Products" : "Produits"}</a></li>
+              <li><a href="#a-propos" onClick={(event) => scrollToSection(event, "a-propos")}>{isEnglish ? "About" : "A propos"}</a></li>
               <li><a href="#contact" onClick={(event) => scrollToSection(event, "contact")}>Contact</a></li>
             </ul>
           </div>
           <div>
-            <h3>Informations</h3>
+            <h3>{isEnglish ? "Information" : "Informations"}</h3>
             <ul>
-              <li>Livraison France & Europe</li>
-              <li>Paiement securise</li>
-              <li>Retours sous 14 jours</li>
-              <li>Service client du lundi au samedi</li>
+              <li>{isEnglish ? "Delivery in France & Europe" : "Livraison France & Europe"}</li>
+              <li>{isEnglish ? "Secure payment" : "Paiement securise"}</li>
+              <li>{isEnglish ? "Returns within 14 days" : "Retours sous 14 jours"}</li>
+              <li>{isEnglish ? "Customer service Monday to Saturday" : "Service client du lundi au samedi"}</li>
             </ul>
           </div>
         </div>
-        <div className="container footer-bottom"><p>© 2026 Mady Mode - Tous droits reserves.</p></div>
+        <div className="container footer-bottom"><p>{isEnglish ? "© 2026 Mady Mode - All rights reserved." : "© 2026 Mady Mode - Tous droits reserves."}</p></div>
       </footer>
 
       <div className={`account-overlay${accountOpen ? " is-visible" : ""}`} hidden={!accountOpen} onClick={() => setAccountOpen(false)}></div>
       <section className={`account-panel${accountOpen ? " is-open" : ""}`} id="account-panel" aria-hidden={!accountOpen} aria-labelledby="account-title">
-        <button className="account-panel-close" type="button" aria-label="Fermer l'espace client" onClick={() => setAccountOpen(false)}>×</button>
+        <button className="account-panel-close" type="button" aria-label={isEnglish ? "Close customer area" : "Fermer l'espace client"} onClick={() => setAccountOpen(false)}>×</button>
         <p className="account-panel-eyebrow">Mady Mode</p>
-        <h2 id="account-title">Espace cliente</h2>
+        <h2 id="account-title">{isEnglish ? "Customer area" : "Espace cliente"}</h2>
         <p className="account-panel-text">
-          Connectez-vous pour retrouver vos selections, suivre vos commandes et acceder a votre univers Mady Mode.
+          {isEnglish
+            ? "Sign in to find your selections, track your orders and access your Mady Mode universe."
+            : "Connectez-vous pour retrouver vos selections, suivre vos commandes et acceder a votre univers Mady Mode."}
         </p>
         <form className="account-form" onSubmit={handleAccountSubmit} noValidate>
           <div className="form-field">
-            <label htmlFor="account-email">Adresse e-mail</label>
+            <label htmlFor="account-email">{isEnglish ? "Email address" : "Adresse e-mail"}</label>
             <input type="email" id="account-email" name="account-email" required />
           </div>
           <div className="form-field">
-            <label htmlFor="account-password">Mot de passe</label>
+            <label htmlFor="account-password">{isEnglish ? "Password" : "Mot de passe"}</label>
             <input type="password" id="account-password" name="account-password" required />
           </div>
-          <button className="button button-primary" type="submit">Se connecter</button>
+          <button className="button button-primary" type="submit">{isEnglish ? "Sign in" : "Se connecter"}</button>
           <p className={`form-message${accountMessage.type ? ` ${accountMessage.type}` : ""}`} aria-live="polite">
             {accountMessage.text}
           </p>
         </form>
         <div className="account-panel-footer">
-          <p>Vous n'avez pas encore de compte ?</p>
+          <p>{isEnglish ? "No account yet?" : "Vous n'avez pas encore de compte ?"}</p>
           <button
             className="account-create-button"
             type="button"
             onClick={() =>
               setAccountMessage({
-                text: "Creation de compte bientot disponible. Ecrivez-nous pour etre accompagnee en priorite.",
+                text: isEnglish
+                  ? "Account creation will be available soon. Contact us for priority support."
+                  : "Creation de compte bientot disponible. Ecrivez-nous pour etre accompagnee en priorite.",
                 type: "success"
               })
             }
           >
-            Creer un compte
+            {isEnglish ? "Create account" : "Creer un compte"}
           </button>
         </div>
       </section>
@@ -591,31 +658,38 @@ export default function HomePage() {
         <div className="cart-panel-header">
           <div>
             <p className="cart-panel-eyebrow">Mady Mode</p>
-            <h2 id="cart-title">Votre panier</h2>
+            <h2 id="cart-title">{isEnglish ? "Your cart" : "Votre panier"}</h2>
           </div>
-          <button className="cart-close" type="button" aria-label="Fermer le panier" onClick={() => setCartOpen(false)}>×</button>
+          <button className="cart-close" type="button" aria-label={isEnglish ? "Close cart" : "Fermer le panier"} onClick={() => setCartOpen(false)}>×</button>
         </div>
         <div className="cart-panel-body">
           {!cart.length ? (
-            <p className="cart-empty">Votre panier est vide pour le moment.</p>
+            <p className="cart-empty">{isEnglish ? "Your cart is empty for now." : "Votre panier est vide pour le moment."}</p>
           ) : (
             <ul className="cart-items">
               {cart.map((item) => (
                 <li className="cart-item" key={item.id}>
-                  <div className={`cart-item-media product-visual ${item.visualClass}`}></div>
+                  <div
+                    className={`cart-item-media product-visual ${item.images?.length ? "" : item.visualClass}`.trim()}
+                    style={
+                      item.images?.length
+                        ? { backgroundImage: `url("${item.images[0].src}")` }
+                        : undefined
+                    }
+                  ></div>
                   <div className="cart-item-copy">
                     <h3>{item.name}</h3>
-                    <p>{item.category} • {formatPrice(item.price)}</p>
-                    <span className="cart-item-qty">Quantite</span>
+                    <p>{isEnglish ? item.categoryEn || item.category : item.category} • {formatPrice(item.price)}</p>
+                    <span className="cart-item-qty">{isEnglish ? "Quantity" : "Quantite"}</span>
                     <div className="cart-item-controls">
-                      <button type="button" className="cart-qty-button" aria-label={`Retirer une unite de ${item.name}`} onClick={() => changeCartQuantity(item.id, -1)}>−</button>
+                      <button type="button" className="cart-qty-button" aria-label={isEnglish ? `Remove one unit of ${item.name}` : `Retirer une unite de ${item.name}`} onClick={() => changeCartQuantity(item.id, -1)}>−</button>
                       <span className="cart-qty-value">{item.quantity}</span>
-                      <button type="button" className="cart-qty-button" aria-label={`Ajouter une unite de ${item.name}`} onClick={() => changeCartQuantity(item.id, 1)}>+</button>
+                      <button type="button" className="cart-qty-button" aria-label={isEnglish ? `Add one unit of ${item.name}` : `Ajouter une unite de ${item.name}`} onClick={() => changeCartQuantity(item.id, 1)}>+</button>
                     </div>
                   </div>
                   <div className="cart-item-actions">
                     <strong>{formatPrice(item.price * item.quantity)}</strong>
-                    <button type="button" className="cart-remove" onClick={() => removeFromCart(item.id)}>Retirer</button>
+                    <button type="button" className="cart-remove" onClick={() => removeFromCart(item.id)}>{isEnglish ? "Remove" : "Retirer"}</button>
                   </div>
                 </li>
               ))}
@@ -624,7 +698,7 @@ export default function HomePage() {
         </div>
         <div className="cart-panel-footer">
           <div className="cart-summary">
-            <span>Total</span>
+            <span>{isEnglish ? "Total" : "Total"}</span>
             <strong>{formatPrice(totalPrice)}</strong>
           </div>
           <div className="cart-footer-actions">
@@ -633,15 +707,15 @@ export default function HomePage() {
               type="button"
               onClick={() => {
                 if (!cart.length) {
-                  showToast("Votre panier est deja vide.");
+                  showToast(isEnglish ? "Your cart is already empty." : "Votre panier est deja vide.");
                   return;
                 }
 
                 clearCart();
-                showToast("Le panier a ete vide.");
+                showToast(isEnglish ? "The cart has been emptied." : "Le panier a ete vide.");
               }}
             >
-              Vider le panier
+              {isEnglish ? "Clear cart" : "Vider le panier"}
             </button>
             <Link
               href={cart.length ? "/account?redirect=checkout" : "#"}
@@ -649,11 +723,11 @@ export default function HomePage() {
               onClick={(event) => {
                 if (!cart.length) {
                   event.preventDefault();
-                  showToast("Votre panier est encore vide.");
+                  showToast(isEnglish ? "Your cart is still empty." : "Votre panier est encore vide.");
                 }
               }}
             >
-              Finaliser la commande
+              {isEnglish ? "Checkout" : "Finaliser la commande"}
             </Link>
           </div>
           <a
@@ -665,16 +739,16 @@ export default function HomePage() {
             onClick={(event) => {
               if (!cart.length) {
                 event.preventDefault();
-                showToast("Ajoutez au moins une piece avant de continuer sur WhatsApp.");
+                showToast(isEnglish ? "Add at least one item before continuing on WhatsApp." : "Ajoutez au moins une piece avant de continuer sur WhatsApp.");
               } else {
-                showToast("Le message de commande est pret pour WhatsApp.");
+                showToast(isEnglish ? "Your order message is ready for WhatsApp." : "Le message de commande est pret pour WhatsApp.");
               }
             }}
           >
-            Commander via WhatsApp
+            {isEnglish ? "Order via WhatsApp" : "Commander via WhatsApp"}
           </a>
           <p className="cart-order-note" aria-live="polite">
-            {cart.length ? "Votre selection est prete a etre envoyee." : ""}
+            {cart.length ? (isEnglish ? "Your selection is ready to be sent." : "Votre selection est prete a etre envoyee.") : ""}
           </p>
         </div>
       </aside>
@@ -682,7 +756,7 @@ export default function HomePage() {
       <button
         className={`back-to-top${showBackToTop ? " is-visible" : ""}`}
         type="button"
-        aria-label="Retour en haut"
+        aria-label={isEnglish ? "Back to top" : "Retour en haut"}
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       >
         ↑

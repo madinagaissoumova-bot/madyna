@@ -3,11 +3,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const CART_STORAGE_KEY = "mady-mode-cart";
+const LANGUAGE_STORAGE_KEY = "mady-mode-language";
 
 const StoreContext = createContext(null);
 
-function formatPrice(value) {
-  return new Intl.NumberFormat("fr-FR", {
+function formatPriceForLanguage(value, language) {
+  return new Intl.NumberFormat(language === "en" ? "en-GB" : "fr-FR", {
     style: "currency",
     currency: "EUR",
     minimumFractionDigits: 0,
@@ -18,14 +19,18 @@ function formatPrice(value) {
 export function StoreProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [toastMessage, setToastMessage] = useState("");
+  const [language, setLanguage] = useState("fr");
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(CART_STORAGE_KEY);
       setCart(stored ? JSON.parse(stored) : []);
+      const storedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      setLanguage(storedLanguage === "en" ? "en" : "fr");
     } catch {
       setCart([]);
+      setLanguage("fr");
     } finally {
       setIsHydrated(true);
     }
@@ -38,6 +43,15 @@ export function StoreProvider({ children }) {
 
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   }, [cart, isHydrated]);
+
+  useEffect(() => {
+    if (!isHydrated) {
+      return;
+    }
+
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    document.documentElement.lang = language;
+  }, [language, isHydrated]);
 
   useEffect(() => {
     if (!toastMessage) {
@@ -53,24 +67,29 @@ export function StoreProvider({ children }) {
 
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const formatPrice = (value) => formatPriceForLanguage(value, language);
   const whatsappHref = cart.length
     ? `https://wa.me/336184002819?text=${encodeURIComponent(
         [
-          "Bonjour Mady Mode,",
-          "je souhaite commander les articles suivants :",
+          language === "en" ? "Hello Mady Mode," : "Bonjour Mady Mode,",
+          language === "en"
+            ? "I would like to order the following items:"
+            : "je souhaite commander les articles suivants :",
           "",
           ...cart.map(
             (item) =>
               `- ${item.name} x${item.quantity} : ${formatPrice(item.price * item.quantity)}`
           ),
           "",
-          `Total : ${formatPrice(totalPrice)}`
+          `${language === "en" ? "Total" : "Total"} : ${formatPrice(totalPrice)}`
         ].join("\n")
       )}`
     : "#";
 
   const value = {
     cart,
+    language,
+    setLanguage,
     totalPrice,
     totalQuantity,
     whatsappHref,

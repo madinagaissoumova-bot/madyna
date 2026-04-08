@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import LanguageToggle from "./LanguageToggle";
 import { useStore } from "./StoreProvider";
 
 export default function ConfirmationPage() {
-  const { cart, totalPrice, formatPrice, showToast } = useStore();
+  const { cart, totalPrice, formatPrice, showToast, language } = useStore();
   const [message, setMessage] = useState({ text: "", type: "" });
+  const isEnglish = language === "en";
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -24,17 +26,21 @@ export default function ConfirmationPage() {
 
     if (!isValid) {
       setMessage({
-        text: "Merci de completer correctement votre adresse et le mode de livraison.",
+        text: isEnglish
+          ? "Please complete your address and delivery method correctly."
+          : "Merci de completer correctement votre adresse et le mode de livraison.",
         type: "error"
       });
       return;
     }
 
     setMessage({
-      text: "Vos informations de livraison ont bien ete enregistrees. Vous pouvez maintenant transmettre votre commande a Mady Mode.",
+      text: isEnglish
+        ? "Your delivery information has been saved. You can now send your order to Mady Mode."
+        : "Vos informations de livraison ont bien ete enregistrees. Vous pouvez maintenant transmettre votre commande a Mady Mode.",
       type: "success"
     });
-    showToast("Informations de livraison enregistrees.");
+    showToast(isEnglish ? "Delivery information saved." : "Informations de livraison enregistrees.");
   }
 
   return (
@@ -48,7 +54,12 @@ export default function ConfirmationPage() {
               <span>Mode modeste</span>
             </span>
           </Link>
-          <Link href="/#produits" className="button button-secondary auth-back-link">Continuer vos achats</Link>
+          <div className="header-actions">
+            <LanguageToggle />
+            <Link href="/#produits" className="button button-secondary auth-back-link">
+              {isEnglish ? "Continue shopping" : "Continuer vos achats"}
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -56,94 +67,103 @@ export default function ConfirmationPage() {
         <section className="auth-section confirmation-section">
           <div className="container auth-shell confirmation-shell">
             <div className="auth-copy">
-              <p className="eyebrow">Commande confirmee</p>
-              <h1>Votre demande est prete</h1>
+              <p className="eyebrow">{isEnglish ? "Order confirmed" : "Commande confirmee"}</p>
+              <h1>{isEnglish ? "Your request is ready" : "Votre demande est prete"}</h1>
               <p>
-                Merci d'avoir valide votre commande chez Mady Mode. Retrouvez ci-dessous le recapitulatif de votre selection avant le dernier echange avec la boutique.
+                {isEnglish
+                  ? "Thank you for confirming your order with Mady Mode. Find your selection summary below before the final exchange with the boutique."
+                  : "Merci d'avoir valide votre commande chez Mady Mode. Retrouvez ci-dessous le recapitulatif de votre selection avant le dernier echange avec la boutique."}
               </p>
               <ul className="auth-benefits">
-                <li>Votre panier a bien ete conserve</li>
-                <li>Votre selection est prete a etre transmise</li>
-                <li>Notre equipe peut maintenant vous accompagner</li>
+                <li>{isEnglish ? "Your cart has been saved" : "Votre panier a bien ete conserve"}</li>
+                <li>{isEnglish ? "Your selection is ready to be sent" : "Votre selection est prete a etre transmise"}</li>
+                <li>{isEnglish ? "Our team can now assist you" : "Notre equipe peut maintenant vous accompagner"}</li>
               </ul>
               <div className="hero-actions confirmation-actions">
-                <Link href="/#produits" className="button button-secondary">Retour a la boutique</Link>
+                <Link href="/#produits" className="button button-secondary">{isEnglish ? "Back to shop" : "Retour a la boutique"}</Link>
                 <a
                   href="https://wa.me/336184002819?text=Bonjour%20Mady%20Mode%2C%20je%20viens%20de%20confirmer%20ma%20commande%20et%20je%20souhaite%20la%20finaliser."
                   className="button button-primary"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Envoyer sur WhatsApp
+                  {isEnglish ? "Send on WhatsApp" : "Envoyer sur WhatsApp"}
                 </a>
               </div>
             </div>
 
             <div className="auth-card confirmation-card">
-              <p className="auth-context">Recapitulatif de commande</p>
+              <p className="auth-context">{isEnglish ? "Order summary" : "Recapitulatif de commande"}</p>
               {cart.length ? (
                 <ul className="confirmation-items">
                   {cart.map((item) => (
                     <li className="confirmation-item" key={item.id}>
-                      <div className={`confirmation-item-media product-visual ${item.visualClass}`}></div>
+                      <div
+                        className={`confirmation-item-media product-visual ${item.images?.length ? "" : item.visualClass}`.trim()}
+                        style={
+                          item.images?.length
+                            ? { backgroundImage: `url("${item.images[0].src}")` }
+                            : undefined
+                        }
+                      ></div>
                       <div className="confirmation-item-copy">
                         <h3>{item.name}</h3>
-                        <p>{item.category} • Quantite : {item.quantity}</p>
+                        <p>{(isEnglish ? item.categoryEn || item.category : item.category)} • {isEnglish ? "Quantity" : "Quantite"} : {item.quantity}</p>
                       </div>
                       <strong>{formatPrice(item.price * item.quantity)}</strong>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <div className="confirmation-empty">Votre commande ne contient pas encore d'articles.</div>
+                <div className="confirmation-empty">{isEnglish ? "Your order does not contain any items yet." : "Votre commande ne contient pas encore d'articles."}</div>
               )}
               <div className="confirmation-total-row">
-                <span>Total</span>
+                <span>{isEnglish ? "Total" : "Total"}</span>
                 <strong>{formatPrice(totalPrice)}</strong>
               </div>
             </div>
 
             <div className="auth-card delivery-card">
-              <p className="auth-context">Adresse & livraison</p>
+              <p className="auth-context">{isEnglish ? "Address & delivery" : "Adresse & livraison"}</p>
               <form className="delivery-form" onSubmit={handleSubmit} noValidate>
                 <div className="form-row">
                   <div className="form-field">
-                    <label htmlFor="delivery-firstname">Prenom</label>
+                    <label htmlFor="delivery-firstname">{isEnglish ? "First name" : "Prenom"}</label>
                     <input type="text" id="delivery-firstname" name="delivery-firstname" required />
                   </div>
                   <div className="form-field">
-                    <label htmlFor="delivery-lastname">Nom</label>
+                    <label htmlFor="delivery-lastname">{isEnglish ? "Last name" : "Nom"}</label>
                     <input type="text" id="delivery-lastname" name="delivery-lastname" required />
                   </div>
                 </div>
                 <div className="form-field">
-                  <label htmlFor="delivery-phone">Telephone</label>
+                  <label htmlFor="delivery-phone">{isEnglish ? "Phone" : "Telephone"}</label>
                   <input type="tel" id="delivery-phone" name="delivery-phone" required />
                 </div>
                 <div className="form-field">
-                  <label htmlFor="delivery-address">Adresse complete</label>
-                  <textarea id="delivery-address" name="delivery-address" rows="4" placeholder="Rue, numero, complement..." required></textarea>
+                  <label htmlFor="delivery-address">{isEnglish ? "Full address" : "Adresse complete"}</label>
+                  <textarea id="delivery-address" name="delivery-address" rows="4" placeholder={isEnglish ? "Street, number, additional details..." : "Rue, numero, complement..."} required></textarea>
                 </div>
                 <div className="form-row">
                   <div className="form-field">
-                    <label htmlFor="delivery-city">Ville</label>
+                    <label htmlFor="delivery-city">{isEnglish ? "City" : "Ville"}</label>
                     <input type="text" id="delivery-city" name="delivery-city" required />
                   </div>
                   <div className="form-field">
-                    <label htmlFor="delivery-postal">Code postal</label>
+                    <label htmlFor="delivery-postal">{isEnglish ? "Postal code" : "Code postal"}</label>
                     <input type="text" id="delivery-postal" name="delivery-postal" required />
                   </div>
                 </div>
                 <div className="form-field">
-                  <label htmlFor="delivery-method">Mode de livraison</label>
+                  <label htmlFor="delivery-method">{isEnglish ? "Delivery method" : "Mode de livraison"}</label>
                   <select id="delivery-method" name="delivery-method" required>
-                    <option value="">Choisir une option</option>
-                    <option value="standard">Livraison standard</option>
-                    <option value="express">Livraison express</option>
-                    <option value="pickup">Retrait boutique</option>
+                    <option value="">{isEnglish ? "Choose an option" : "Choisir une option"}</option>
+                    <option value="standard">{isEnglish ? "Standard delivery" : "Livraison standard"}</option>
+                    <option value="express">{isEnglish ? "Express delivery" : "Livraison express"}</option>
+                    <option value="pickup">{isEnglish ? "Store pickup" : "Retrait boutique"}</option>
                   </select>
                 </div>
-                <button className="button button-primary" type="submit">Enregistrer les informations</button>
+                <button className="button button-primary" type="submit">{isEnglish ? "Save information" : "Enregistrer les informations"}</button>
                 <p className={`form-message${message.type ? ` ${message.type}` : ""}`} aria-live="polite">
                   {message.text}
                 </p>
