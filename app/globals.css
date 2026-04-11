@@ -1247,7 +1247,7 @@ body::after {
 
   .home-landing-mobile {
     display: block;
-    padding: calc(var(--header-height) + 1rem) 0 2rem !important;
+    padding: var(--header-height) 0 2rem !important;
   }
 
   .home-landing-mobile-shell {
@@ -1314,10 +1314,16 @@ body::after {
   }
 
   .home-carousel-controls-mobile {
-    justify-content: center;
+    justify-content: space-between;
     left: 0.75rem;
     right: 0.75rem;
     bottom: 0.75rem;
+  }
+
+  .hero-control-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .section::before {
@@ -1527,7 +1533,7 @@ body::after {
 
 @media (max-width: 560px) {
   .home-landing-mobile {
-    padding: calc(var(--header-height) + 0.8rem) 0 1.5rem !important;
+    padding: calc(var(--header-height) - 0.1rem) 0 1.5rem !important;
   }
 
   .home-landing-mobile-shell {
@@ -1698,7 +1704,7 @@ body::after {
     justify-content: center;
   }
 
-  .hero-control {
+  .home-landing-desktop .hero-control {
     display: none;
   }
 
