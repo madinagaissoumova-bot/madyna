@@ -138,10 +138,29 @@ export default function HomePage() {
             </div>
 
             <div className="home-landing-mobile-visual">
-              <img
-                src={heroSlides[heroIndex].src}
-                alt={isEnglish ? heroSlides[heroIndex].altEn || heroSlides[heroIndex].alt : heroSlides[heroIndex].alt}
-              />
+              <div className="home-carousel-frame home-carousel-frame-mobile">
+                <div className="home-carousel-shell">
+                  {heroSlides.map((slide, index) => (
+                    <div key={`mobile-${slide.src}`} className={`home-carousel-slide${index === heroIndex ? " is-active" : ""}`}>
+                      <img src={slide.src} alt={isEnglish ? slide.altEn || slide.alt : slide.alt} />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="home-carousel-controls home-carousel-controls-mobile">
+                  <div className="hero-dots" aria-label={isEnglish ? "Carousel navigation" : "Navigation du carrousel"}>
+                    {heroSlides.map((slide, index) => (
+                      <button
+                        key={`mobile-dot-${slide.src}`}
+                        className={`hero-dot${index === heroIndex ? " is-active" : ""}`}
+                        type="button"
+                        aria-label={isEnglish ? `Go to image ${index + 1}` : `Aller a l'image ${index + 1}`}
+                        onClick={() => setHeroIndex(index)}
+                      ></button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
