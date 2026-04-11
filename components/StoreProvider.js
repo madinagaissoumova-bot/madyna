@@ -1,9 +1,12 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import CartDrawer from "./CartDrawer";
 
 const CART_STORAGE_KEY = "mady-mode-cart";
 const LANGUAGE_STORAGE_KEY = "mady-mode-language";
+const ACCOUNT_STORAGE_KEY = "mady-mode-account";
+const ACCOUNT_SESSION_STORAGE_KEY = "mady-mode-account-session";
 
 const StoreContext = createContext(null);
 
@@ -21,6 +24,9 @@ export function StoreProvider({ children }) {
   const [toastMessage, setToastMessage] = useState("");
   const [language, setLanguage] = useState("fr");
   const [isHydrated, setIsHydrated] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [account, setAccount] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     try {
@@ -28,9 +34,16 @@ export function StoreProvider({ children }) {
       setCart(stored ? JSON.parse(stored) : []);
       const storedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
       setLanguage(storedLanguage === "en" ? "en" : "fr");
+      const storedAccount = window.localStorage.getItem(ACCOUNT_STORAGE_KEY);
+      const parsedAccount = storedAccount ? JSON.parse(storedAccount) : null;
+      setAccount(parsedAccount);
+      const storedSession = window.localStorage.getItem(ACCOUNT_SESSION_STORAGE_KEY);
+      setCurrentUser(storedSession ? JSON.parse(storedSession) : parsedAccount);
     } catch {
       setCart([]);
       setLanguage("fr");
+      setAccount(null);
+      setCurrentUser(null);
     } finally {
       setIsHydrated(true);
     }
@@ -54,6 +67,30 @@ export function StoreProvider({ children }) {
   }, [language, isHydrated]);
 
   useEffect(() => {
+    if (!isHydrated) {
+      return;
+    }
+
+    if (account) {
+      window.localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(account));
+    } else {
+      window.localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+    }
+  }, [account, isHydrated]);
+
+  useEffect(() => {
+    if (!isHydrated) {
+      return;
+    }
+
+    if (currentUser) {
+      window.localStorage.setItem(ACCOUNT_SESSION_STORAGE_KEY, JSON.stringify(currentUser));
+    } else {
+      window.localStorage.removeItem(ACCOUNT_SESSION_STORAGE_KEY);
+    }
+  }, [currentUser, isHydrated]);
+
+  useEffect(() => {
     if (!toastMessage) {
       return undefined;
     }
@@ -64,6 +101,11 @@ export function StoreProvider({ children }) {
 
     return () => window.clearTimeout(timeoutId);
   }, [toastMessage]);
+
+  useEffect(() => {
+    document.body.classList.toggle("cart-open", cartOpen);
+    return () => document.body.classList.remove("cart-open");
+  }, [cartOpen]);
 
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -90,12 +132,42 @@ export function StoreProvider({ children }) {
     cart,
     language,
     setLanguage,
+    account,
+    currentUser,
     totalPrice,
     totalQuantity,
+    cartOpen,
     whatsappHref,
     formatPrice,
     toastMessage,
     showToast: setToastMessage,
+    openCart() {
+      setCartOpen(true);
+    },
+    closeCart() {
+      setCartOpen(false);
+    },
+    createAccount(email, password) {
+      const nextAccount = { email, password };
+      setAccount(nextAccount);
+      setCurrentUser({ email });
+      return { ok: true };
+    },
+    signInAccount(email, password) {
+      if (!account) {
+        return { ok: false, reason: "no_account" };
+      }
+
+      if (account.email !== email || account.password !== password) {
+        return { ok: false, reason: "invalid_credentials" };
+      }
+
+      setCurrentUser({ email });
+      return { ok: true };
+    },
+    signOutAccount() {
+      setCurrentUser(null);
+    },
     addToCart(product) {
       setCart((currentCart) => {
         const existing = currentCart.find((item) => item.id === product.id);
@@ -128,6 +200,7 @@ export function StoreProvider({ children }) {
   return (
     <StoreContext.Provider value={value}>
       {children}
+      <CartDrawer />
       <div className={`toast${toastMessage ? " is-visible" : ""}`} aria-live="polite" aria-atomic="true">
         {toastMessage}
       </div>

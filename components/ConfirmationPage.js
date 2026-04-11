@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import LanguageToggle from "./LanguageToggle";
+import { getMainNavItems } from "../lib/siteContent";
+import SiteNavbar from "./SiteNavbar";
 import { useStore } from "./StoreProvider";
 
 export default function ConfirmationPage() {
@@ -45,23 +46,15 @@ export default function ConfirmationPage() {
 
   return (
     <div className="account-page-body">
-      <header className="site-header auth-header">
-        <div className="container header-inner">
-          <Link href="/#accueil" className="logo" aria-label="Mady Mode accueil">
-            <span className="logo-mark">M</span>
-            <span className="logo-text">
-              <strong>Mady Mode</strong>
-              <span>Mode modeste</span>
-            </span>
+      <SiteNavbar
+        sticky
+        navItems={getMainNavItems(isEnglish)}
+        actions={
+          <Link href="/boutique" className="button button-secondary auth-back-link">
+            {isEnglish ? "Continue shopping" : "Continuer vos achats"}
           </Link>
-          <div className="header-actions">
-            <LanguageToggle />
-            <Link href="/#produits" className="button button-secondary auth-back-link">
-              {isEnglish ? "Continue shopping" : "Continuer vos achats"}
-            </Link>
-          </div>
-        </div>
-      </header>
+        }
+      />
 
       <main className="auth-main">
         <section className="auth-section confirmation-section">
@@ -80,15 +73,6 @@ export default function ConfirmationPage() {
                 <li>{isEnglish ? "Our team can now assist you" : "Notre equipe peut maintenant vous accompagner"}</li>
               </ul>
               <div className="hero-actions confirmation-actions">
-                <Link href="/#produits" className="button button-secondary">{isEnglish ? "Back to shop" : "Retour a la boutique"}</Link>
-                <a
-                  href="https://wa.me/336184002819?text=Bonjour%20Mady%20Mode%2C%20je%20viens%20de%20confirmer%20ma%20commande%20et%20je%20souhaite%20la%20finaliser."
-                  className="button button-primary"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {isEnglish ? "Send on WhatsApp" : "Envoyer sur WhatsApp"}
-                </a>
               </div>
             </div>
 

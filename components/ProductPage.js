@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import LanguageToggle from "./LanguageToggle";
-import { productImagesByVisualClass } from "../lib/store";
+import ProductCard from "./ProductCard";
+import SiteNavbar from "./SiteNavbar";
+import { getMainNavItems } from "../lib/siteContent";
+import { productImagesByVisualClass, products } from "../lib/store";
 import { useStore } from "./StoreProvider";
 
 export default function ProductPage({ product }) {
@@ -21,11 +23,35 @@ export default function ProductPage({ product }) {
       }
     ];
   }, [product]);
+  const relatedProducts = useMemo(() => {
+    const sameCategoryProducts = products.filter(
+      (candidate) => candidate.id !== product.id && candidate.category === product.category
+    );
+
+    if (sameCategoryProducts.length >= 3) {
+      return sameCategoryProducts.slice(0, 3);
+    }
+
+    const fallbackProducts = products.filter(
+      (candidate) => candidate.id !== product.id && candidate.category !== product.category
+    );
+
+    return [...sameCategoryProducts, ...fallbackProducts].slice(0, 3);
+  }, [product]);
   const [activeImage, setActiveImage] = useState(0);
 
   function handleAddToCart() {
     addToCart(product);
     showToast(isEnglish ? `${product.name} has been added to your cart.` : `${product.name} a ete ajoute au panier.`);
+  }
+
+  function handleAddRelatedProductToCart(relatedProduct) {
+    addToCart(relatedProduct);
+    showToast(
+      isEnglish
+        ? `${relatedProduct.name} has been added to your cart.`
+        : `${relatedProduct.name} a ete ajoute au panier.`
+    );
   }
 
   function goToImage(nextIndex) {
@@ -35,23 +61,10 @@ export default function ProductPage({ product }) {
 
   return (
     <div className="product-page-shell">
-      <header className="site-header auth-header">
-        <div className="container header-inner">
-          <Link href="/#accueil" className="logo" aria-label="Mady Mode accueil">
-            <span className="logo-mark">M</span>
-            <span className="logo-text">
-              <strong>Mady Mode</strong>
-              <span>Mode modeste</span>
-            </span>
-          </Link>
-          <div className="header-actions">
-            <LanguageToggle />
-            <Link href="/#produits" className="button button-secondary auth-back-link">
-              {isEnglish ? "Back to shop" : "Retour a la boutique"}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteNavbar
+        sticky
+        navItems={getMainNavItems(isEnglish)}
+      />
 
       <main className="product-main">
         <section className="product-detail-section">
@@ -103,7 +116,6 @@ export default function ProductPage({ product }) {
             </div>
 
             <div className="product-copy-card">
-              <p className="eyebrow">{isEnglish ? "Product page" : "Fiche produit"}</p>
               <p className="product-detail-category">{isEnglish ? product.categoryEn || product.category : product.category}</p>
               <h1>{product.name}</h1>
               <p className="product-detail-price">{formatPrice(product.price)}</p>
@@ -120,13 +132,41 @@ export default function ProductPage({ product }) {
                 <button className="button button-primary" type="button" onClick={handleAddToCart}>
                   {isEnglish ? "Add to cart" : "Ajouter au panier"}
                 </button>
-                <Link href="/#produits" className="button button-secondary">
+                <Link href="/boutique" className="button button-secondary">
                   {isEnglish ? "Continue shopping" : "Continuer vos achats"}
                 </Link>
               </div>
             </div>
           </div>
         </section>
+
+        {relatedProducts.length ? (
+          <section className="product-related-section">
+            <div className="container">
+              <div className="section-heading">
+                <p className="eyebrow">{isEnglish ? "You may also like" : "Vous aimerez aussi"}</p>
+                <h2>{isEnglish ? "Similar pieces to discover" : "Des pieces similaires a decouvrir"}</h2>
+                <p>
+                  {isEnglish
+                    ? "A curated selection in the same spirit to continue exploring the collection."
+                    : "Une selection dans le meme esprit pour prolonger la decouverte de la collection."}
+                </p>
+              </div>
+
+              <div className="products-grid">
+                {relatedProducts.map((relatedProduct) => (
+                  <ProductCard
+                    key={relatedProduct.id}
+                    product={relatedProduct}
+                    isEnglish={isEnglish}
+                    formatPrice={formatPrice}
+                    onAddToCart={handleAddRelatedProductToCart}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
       </main>
     </div>
   );
