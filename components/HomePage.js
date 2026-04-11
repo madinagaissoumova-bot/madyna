@@ -11,8 +11,18 @@ export default function HomePage() {
   const { language } = useStore();
   const isEnglish = language === "en";
   const [heroIndex, setHeroIndex] = useState(0);
+  const heroTitle = isEnglish
+    ? "Abayas with a couture spirit, created for a refined and understated presence."
+    : "L'élégance modeste";
+  const heroDescription = isEnglish
+    ? "Fluid silhouettes, beautiful fabrics and refined finishes imagined for a modern, elegant presence."
+    : "Des silhouettes fluides, de belles matieres et des finitions raffinees, pensees pour une allure moderne et elegante.";
 
   useEffect(() => {
+    if (window.matchMedia("(max-width: 560px)").matches) {
+      return undefined;
+    }
+
     const intervalId = window.setInterval(() => {
       setHeroIndex((currentIndex) => (currentIndex + 1) % heroSlides.length);
     }, 4200);
@@ -25,7 +35,7 @@ export default function HomePage() {
       <SiteNavbar sticky navItems={getMainNavItems(isEnglish)} />
 
       <main className="page-main">
-        <section className="hero section home-landing">
+        <section className="hero section home-landing home-landing-desktop">
           <div className="container home-landing-grid">
             <div className="home-landing-visual">
               <div className="home-orb home-orb-large"></div>
@@ -86,9 +96,7 @@ export default function HomePage() {
                 </div>
 
                 <h1 className="home-landing-title">
-                  {isEnglish
-                    ? "Abayas with a couture spirit, created for a refined and understated presence."
-                    : "L'élégance modeste"}
+                  {heroTitle}
                 </h1>
 
                 <div className="home-landing-cta-block">
@@ -97,22 +105,43 @@ export default function HomePage() {
                       {isEnglish ? "Discover the collection" : "Decouvrir la collection"}
                     </Link>
                   </div>
-                <p className="home-landing-meta">
-                  {isEnglish ? "Beautiful fabrics. Careful finishes." : "Belles matieres. Finitions soignees."}
-                </p>
-                <div className="home-landing-signature" aria-label={isEnglish ? "Brand values" : "Valeurs de la maison"}>
-                  <span>{isEnglish ? "Fluid drape" : "Tombe fluide"}</span>
-                  <span>{isEnglish ? "Clean lines" : "Lignes sobres"}</span>
-                  <span>{isEnglish ? "Refined allure" : "Allure raffinee"}</span>
+                  <p className="home-landing-meta">
+                    {isEnglish ? "Beautiful fabrics. Careful finishes." : "Belles matieres. Finitions soignees."}
+                  </p>
+                  <div className="home-landing-signature" aria-label={isEnglish ? "Brand values" : "Valeurs de la maison"}>
+                    <span>{isEnglish ? "Fluid drape" : "Tombe fluide"}</span>
+                    <span>{isEnglish ? "Clean lines" : "Lignes sobres"}</span>
+                    <span>{isEnglish ? "Refined allure" : "Allure raffinee"}</span>
+                  </div>
                 </div>
-              </div>
 
                 <p className="home-landing-text">
-                  {isEnglish
-                    ? "Fluid silhouettes, beautiful fabrics and refined finishes imagined for a modern, elegant presence."
-                    : "Des silhouettes fluides, de belles matieres et des finitions raffinees, pensees pour une allure moderne et elegante."}
+                  {heroDescription}
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="hero section home-landing-mobile">
+          <div className="container home-landing-mobile-shell">
+            <div className="home-landing-mobile-copy">
+              <p className="home-landing-mobile-note">
+                {isEnglish ? "House selection" : "Selection de la maison"}
+              </p>
+              <p className="eyebrow">{isEnglish ? "Modest fashion house" : "Maison de mode modeste"}</p>
+              <h1 className="home-landing-mobile-title">{heroTitle}</h1>
+              <p className="home-landing-mobile-text">{heroDescription}</p>
+              <Link href="/boutique" className="button button-primary home-landing-mobile-button">
+                {isEnglish ? "Discover the collection" : "Decouvrir la collection"}
+              </Link>
+            </div>
+
+            <div className="home-landing-mobile-visual">
+              <img
+                src={heroSlides[heroIndex].src}
+                alt={isEnglish ? heroSlides[heroIndex].altEn || heroSlides[heroIndex].alt : heroSlides[heroIndex].alt}
+              />
             </div>
           </div>
         </section>

@@ -8,6 +8,11 @@ export const metadata = {
     "Mady Mode, boutique de vetements modestes au style premium, feminin et contemporain."
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
