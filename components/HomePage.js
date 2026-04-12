@@ -30,7 +30,7 @@ export default function HomePage() {
     <>
       <SiteNavbar sticky navItems={getMainNavItems(isEnglish)} />
 
-      <main className="page-main">
+      <main className="page-main home-main">
         <section className="hero section home-landing home-landing-desktop">
           <div className="container home-landing-grid">
             <div className="home-landing-visual">
@@ -144,14 +144,6 @@ export default function HomePage() {
                 </div>
 
                 <div className="home-carousel-controls home-carousel-controls-mobile">
-                  <button
-                    type="button"
-                    className="hero-control hero-control-mobile"
-                    aria-label={isEnglish ? "Previous image" : "Image precedente"}
-                    onClick={() => setHeroIndex((heroIndex - 1 + heroSlides.length) % heroSlides.length)}
-                  >
-                    ‹
-                  </button>
                   <div className="hero-dots" aria-label={isEnglish ? "Carousel navigation" : "Navigation du carrousel"}>
                     {heroSlides.map((slide, index) => (
                       <button
@@ -163,14 +155,6 @@ export default function HomePage() {
                       ></button>
                     ))}
                   </div>
-                  <button
-                    type="button"
-                    className="hero-control hero-control-mobile"
-                    aria-label={isEnglish ? "Next image" : "Image suivante"}
-                    onClick={() => setHeroIndex((heroIndex + 1) % heroSlides.length)}
-                  >
-                    ›
-                  </button>
                 </div>
               </div>
             </div>

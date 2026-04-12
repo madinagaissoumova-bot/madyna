@@ -1251,14 +1251,18 @@ body::after {
     overflow-x: hidden;
   }
 
+  .home-main {
+    padding-top: 0;
+  }
+
   .home-landing-desktop {
     display: none;
   }
 
   .home-landing-mobile {
     display: block;
-    padding: 0 0 2rem !important;
-    margin-top: -2.2rem;
+    padding: 0.2rem 0 2rem !important;
+    margin-top: 0;
   }
 
   .header-button-icon {
@@ -1555,8 +1559,8 @@ body::after {
 
 @media (max-width: 560px) {
   .home-landing-mobile {
-    padding: 0 0 1.5rem !important;
-    margin-top: -2.6rem;
+    padding: 0.15rem 0 1.5rem !important;
+    margin-top: 0;
   }
 
   .home-landing-mobile-shell {
