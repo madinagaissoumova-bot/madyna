@@ -1005,12 +1005,12 @@ body::after {
 }
 
 .product-main {
-  padding-top: calc(var(--header-height) + 0.35rem);
+  padding-top: calc(var(--header-height) - 0.15rem);
   padding-bottom: 3rem;
 }
 
 .product-detail-section {
-  padding: 0.45rem 0 4rem;
+  padding: 0.1rem 0 4rem;
 }
 
 .product-related-section {
@@ -1177,12 +1177,12 @@ body::after {
   }
 
   .product-main {
-    padding-top: calc(var(--header-height) + 0.75rem);
+    padding-top: calc(var(--header-height) - 0.1rem);
     padding-bottom: 2.5rem;
   }
 
   .product-detail-section {
-    padding: 1rem 0 3rem;
+    padding: 0.2rem 0 3rem;
   }
 
   .product-gallery-main {
@@ -1835,6 +1835,14 @@ body::after {
   .confirmation-section,
   .auth-section {
     padding-top: 2.25rem;
+  }
+
+  .product-main {
+    padding-top: calc(var(--header-height) - 0.2rem);
+  }
+
+  .product-detail-section {
+    padding-top: 0.15rem;
   }
 
   .section-heading {
