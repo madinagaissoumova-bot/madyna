@@ -1837,6 +1837,14 @@ body::after {
     padding-top: 2.25rem;
   }
 
+  .product-main {
+    padding-top: calc(var(--header-height) - 1rem);
+  }
+
+  .product-detail-section {
+    padding-top: 0 !important;
+  }
+
 
   .section-heading {
     margin-bottom: 2rem;
