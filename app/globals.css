@@ -686,8 +686,8 @@ body::after {
 }
 
 .boutique-products-grid {
-  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
-  gap: 1.7rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
   align-items: stretch;
 }
 
@@ -697,18 +697,20 @@ body::after {
   display: flex;
   min-height: 100%;
   flex-direction: column;
-  border-radius: 30px;
-  background: rgba(255, 251, 246, 0.86);
-  border: 1px solid rgba(169, 138, 116, 0.14);
-  box-shadow: 0 24px 54px rgba(36, 25, 19, 0.08);
+  border-radius: 32px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.34), transparent 22%),
+    linear-gradient(180deg, rgba(255, 251, 246, 0.96), rgba(244, 235, 226, 0.96));
+  border: 1px solid rgba(169, 138, 116, 0.16);
+  box-shadow: 0 26px 64px rgba(36, 25, 19, 0.1);
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
 .product-card:hover,
 .product-card:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 28px 70px rgba(36, 25, 19, 0.13);
-  border-color: rgba(169, 138, 116, 0.28);
+  transform: translateY(-8px);
+  box-shadow: 0 34px 82px rgba(36, 25, 19, 0.16);
+  border-color: rgba(169, 138, 116, 0.3);
 }
 
 .product-card-link,
@@ -720,11 +722,15 @@ body::after {
   overflow: hidden;
 }
 
+.boutique-products-grid .product-visual {
+  aspect-ratio: 4 / 4.9;
+}
+
 .product-body {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  padding: 1.45rem;
+  padding: 1.55rem;
 }
 
 .product-head {
@@ -732,7 +738,7 @@ body::after {
   align-items: center;
   justify-content: space-between;
   gap: 0.8rem;
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.85rem;
 }
 
 .product-category {
@@ -755,19 +761,21 @@ body::after {
 }
 
 .product-body h3 {
-  margin-bottom: 0.7rem;
-  font-size: 1.5rem;
+  margin-bottom: 0.85rem;
+  font-size: 1.65rem;
   font-family: "Cormorant Garamond", serif;
-  line-height: 1;
+  line-height: 0.95;
 }
 
 .product-description {
   display: -webkit-box;
-  min-height: 4.8rem;
+  min-height: 5rem;
   margin: 0;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  font-size: 0.97rem;
+  line-height: 1.62;
 }
 
 .product-body p:last-of-type {
@@ -781,7 +789,7 @@ body::after {
 }
 
 .product-price-block strong {
-  font-size: 1.35rem;
+  font-size: 1.5rem;
 }
 
 .product-price-block span {
@@ -791,29 +799,36 @@ body::after {
 
 .product-card-actions {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-end;
+  flex-direction: column;
   gap: 0.7rem;
-  flex-wrap: wrap;
+  min-width: 10rem;
 }
 
 .product-footer {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 1.1rem;
   border-top: 1px solid rgba(169, 138, 116, 0.12);
 }
 
 .boutique-section .section-heading {
-  margin-bottom: 2.6rem;
+  margin-bottom: 2.8rem;
 }
 
 .boutique-section .products-toolbar {
   margin-bottom: 2.2rem;
 }
 
+.boutique-section .products-toolbar {
+  justify-content: space-between;
+  align-items: center;
+}
+
 .product-detail-link {
   min-height: 48px;
   padding-inline: 1rem;
+  width: 100%;
 }
 
 .add-to-cart {
@@ -824,6 +839,26 @@ body::after {
   background: var(--color-dark);
   color: #fff;
   box-shadow: 0 14px 30px rgba(22, 16, 13, 0.14);
+  width: 100%;
+}
+
+@media (min-width: 1280px) {
+  .boutique-products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1080px) {
+  .boutique-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .boutique-products-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
 }
 
 .benefits-grid {
