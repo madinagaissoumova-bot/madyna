@@ -1257,7 +1257,7 @@ body::after {
 
   .home-landing-mobile {
     display: block;
-    padding: var(--header-height) 0 2rem !important;
+    padding: 0.35rem 0 2rem !important;
   }
 
   .header-button-icon {
@@ -1553,7 +1553,7 @@ body::after {
 
 @media (max-width: 560px) {
   .home-landing-mobile {
-    padding: calc(var(--header-height) - 0.1rem) 0 1.5rem !important;
+    padding: 0.2rem 0 1.5rem !important;
   }
 
   .home-landing-mobile-shell {
