@@ -44,10 +44,6 @@ export default function SiteNavbar({
     <header className={`site-header${sticky ? " auth-header" : ""}`} id="top">
       <div className="container header-inner">
         <Link href="/" className="logo" aria-label="Mady Mode accueil" onClick={() => setMenuOpen(false)}>
-          <span className="logo-mark">
-            <span className="logo-mark-orbit" aria-hidden="true"></span>
-            <span className="logo-mark-inner">M</span>
-          </span>
           <span className="logo-text">
             <span className="logo-overline">Maison</span>
             <strong>Mady Mode</strong>
