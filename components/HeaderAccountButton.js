@@ -15,7 +15,6 @@ export default function HeaderAccountButton() {
           <path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" />
         </svg>
       </span>
-      <span className="header-button-text">{isEnglish ? "Customer area" : "Espace cliente"}</span>
     </Link>
   );
 }
