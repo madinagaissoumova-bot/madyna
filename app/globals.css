@@ -1296,7 +1296,7 @@ body::after {
   .home-landing-mobile {
     display: block;
     padding: 0 0 2rem !important;
-    margin-top: -1.5rem;
+    margin-top: -0.8rem;
   }
 
   .header-button-icon {
