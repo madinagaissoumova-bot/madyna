@@ -14,8 +14,8 @@ export default function SiteFooter() {
       <div className="container footer-grid">
         <div>
           <Link href="/" className="logo footer-logo" aria-label="Mady Mode accueil">
-            <span className="logo-mark">M</span>
             <span className="logo-text">
+              <span className="logo-overline">Maison</span>
               <strong>Mady Mode</strong>
               <span>Mode modeste</span>
             </span>
