@@ -1609,24 +1609,8 @@ body::after {
   }
 
   .logo {
-    gap: 0.65rem;
     min-width: 0;
     flex: 1 1 auto;
-  }
-
-  .logo-mark {
-    width: 40px;
-    height: 40px;
-    font-size: 1.35rem;
-  }
-
-  .logo-text strong {
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
-  }
-
-  .logo-text span:last-child {
-    display: none;
   }
 
   .header-inner {
