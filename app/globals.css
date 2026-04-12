@@ -1765,13 +1765,27 @@ body::after {
     border-radius: 20px;
     max-height: min(70vh, 28rem);
     overflow: auto;
+    background: linear-gradient(180deg, rgba(255,253,249,.98), rgba(243,233,223,.98));
+    border: 1px solid rgba(169,138,116,.12);
+    box-shadow: 0 18px 42px rgba(32,22,17,.12);
+  }
+
+  .site-nav ul {
+    gap: 0.7rem;
   }
 
   .site-nav a {
     font-size: 1rem;
     display: block;
     width: 100%;
-    padding: 0.35rem 0;
+    padding: 0.8rem 0.9rem;
+    border-radius: 16px;
+    background: rgba(255,255,255,.6);
+    border: 1px solid rgba(169,138,116,.1);
+  }
+
+  .site-nav a::after {
+    display: none;
   }
 
   .language-toggle {
@@ -1841,6 +1855,8 @@ body::after {
     flex-direction: column;
     align-items: stretch;
     gap: 0.65rem;
+    padding: 0.9rem;
+    border-radius: 20px;
   }
 
   .hero-highlights li,
@@ -1896,6 +1912,7 @@ body::after {
   .product-gallery-arrow {
     width: 42px;
     height: 42px;
+    background: rgba(255, 250, 244, 0.9);
   }
 
   .product-badge {
@@ -1916,6 +1933,15 @@ body::after {
     line-height: 1.6;
   }
 
+  .product-copy-card,
+  .product-gallery-card,
+  .cart-page-card,
+  .auth-card,
+  .contact-form,
+  .newsletter-card {
+    box-shadow: 0 18px 40px rgba(36,25,19,.08);
+  }
+
   .product-gallery-thumbs {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.55rem;
@@ -1930,6 +1956,11 @@ body::after {
   .confirmation-item {
     padding: 0.9rem;
     border-radius: 18px;
+  }
+
+  .cart-item {
+    gap: 0.85rem;
+    background: rgba(255,255,255,.74);
   }
 
   .confirmation-item {
@@ -1959,9 +1990,22 @@ body::after {
     font-size: 0.88rem;
   }
 
+  .cart-item-actions {
+    width: 100%;
+    padding-top: 0.2rem;
+  }
+
+  .cart-remove {
+    padding: 0.2rem 0;
+  }
+
   .cart-panel-footer,
   .confirmation-total-row {
     gap: 0.7rem;
+  }
+
+  .cart-footer-actions {
+    gap: 0.6rem;
   }
 
   .auth-copy h1,
