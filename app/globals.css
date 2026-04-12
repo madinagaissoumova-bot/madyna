@@ -1005,12 +1005,12 @@ body::after {
 }
 
 .product-main {
-  padding-top: calc(var(--header-height) + 0.2rem);
+  padding-top: calc(var(--header-height) - 0.55rem);
   padding-bottom: 3rem;
 }
 
 .product-detail-section {
-  padding: 0.2rem 0 4rem;
+  padding: 0 0 4rem;
 }
 
 .product-related-section {
@@ -1177,12 +1177,12 @@ body::after {
   }
 
   .product-main {
-    padding-top: calc(var(--header-height) + 0.1rem);
+    padding-top: calc(var(--header-height) - 0.45rem);
     padding-bottom: 2.5rem;
   }
 
   .product-detail-section {
-    padding: 0.15rem 0 3rem;
+    padding: 0 0 3rem;
   }
 
   .product-gallery-main {
