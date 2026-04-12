@@ -1838,7 +1838,7 @@ body::after {
   }
 
   .product-main {
-    padding-top: calc(var(--header-height) - 1rem);
+    padding-top: calc(var(--header-height) - 1.55rem);
   }
 
   .product-detail-section {
