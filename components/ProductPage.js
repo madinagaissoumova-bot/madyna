@@ -5,24 +5,13 @@ import { useMemo, useState } from "react";
 import ProductCard from "./ProductCard";
 import SiteNavbar from "./SiteNavbar";
 import { getMainNavItems } from "../lib/siteContent";
-import { productImagesByVisualClass, products } from "../lib/store";
+import { products } from "../lib/store";
 import { useStore } from "./StoreProvider";
 
 export default function ProductPage({ product }) {
   const { addToCart, showToast, formatPrice, language } = useStore();
   const isEnglish = language === "en";
-  const images = useMemo(() => {
-    if (product.images?.length) {
-      return product.images;
-    }
-
-    return [
-      {
-        src: productImagesByVisualClass[product.visualClass],
-        alt: product.name
-      }
-    ];
-  }, [product]);
+  const images = product.images;
   const relatedProducts = useMemo(() => {
     const sameCategoryProducts = products.filter(
       (candidate) => candidate.id !== product.id && candidate.category === product.category

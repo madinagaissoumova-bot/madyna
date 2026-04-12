@@ -9,7 +9,13 @@ export default function HeaderAccountButton() {
 
   return (
     <Link href="/account" className="account-button">
-      {isEnglish ? "Customer area" : "Espace cliente"}
+      <span className="header-button-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="8" r="3.2" />
+          <path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" />
+        </svg>
+      </span>
+      <span>{isEnglish ? "Customer area" : "Espace cliente"}</span>
     </Link>
   );
 }

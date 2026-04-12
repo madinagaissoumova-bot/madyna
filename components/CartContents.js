@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { productImagesByVisualClass } from "../lib/store";
 import { useStore } from "./StoreProvider";
 
 export default function CartContents({ compact = false, onNavigate } = {}) {
@@ -32,14 +31,8 @@ export default function CartContents({ compact = false, onNavigate } = {}) {
         {cart.map((item) => (
           <li className="cart-item" key={item.id}>
             <div
-              className={`cart-item-media ${item.images?.length ? "" : `product-visual ${item.visualClass || ""}`}`.trim()}
-              style={
-                item.images?.length
-                  ? { backgroundImage: `url("${item.images[0].src}")` }
-                  : item.visualClass
-                    ? { backgroundImage: `url("${productImagesByVisualClass[item.visualClass] || ""}")` }
-                    : undefined
-              }
+              className="cart-item-media"
+              style={{ backgroundImage: `url("${item.images[0].src}")` }}
             ></div>
             <div className="cart-item-copy">
               <h3>{item.name}</h3>

@@ -72,8 +72,6 @@ export default function ConfirmationPage() {
                 <li>{isEnglish ? "Your selection is ready to be sent" : "Votre selection est prete a etre transmise"}</li>
                 <li>{isEnglish ? "Our team can now assist you" : "Notre equipe peut maintenant vous accompagner"}</li>
               </ul>
-              <div className="hero-actions confirmation-actions">
-              </div>
             </div>
 
             <div className="auth-card confirmation-card">
@@ -83,12 +81,8 @@ export default function ConfirmationPage() {
                   {cart.map((item) => (
                     <li className="confirmation-item" key={item.id}>
                       <div
-                        className={`confirmation-item-media product-visual ${item.images?.length ? "" : item.visualClass}`.trim()}
-                        style={
-                          item.images?.length
-                            ? { backgroundImage: `url("${item.images[0].src}")` }
-                            : undefined
-                        }
+                        className="confirmation-item-media"
+                        style={{ backgroundImage: `url("${item.images[0].src}")` }}
                       ></div>
                       <div className="confirmation-item-copy">
                         <h3>{item.name}</h3>

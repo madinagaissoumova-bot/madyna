@@ -7,14 +7,8 @@ export default function ProductCard({ product, isEnglish, formatPrice, onAddToCa
     <article className="product-card">
       <Link href={`/produit/${product.id}`} className="product-card-link" aria-label={`Voir la fiche de ${product.name}`}>
         <div
-          className={`product-visual ${product.images?.length ? "" : product.visualClass}`.trim()}
-          style={
-            product.images?.length
-              ? {
-                  backgroundImage: `url("${product.cardImageSrc || product.images[0].src}")`
-                }
-              : undefined
-          }
+          className="product-visual"
+          style={{ backgroundImage: `url("${product.cardImageSrc || product.images[0].src}")` }}
         ></div>
       </Link>
       <div className="product-body">
