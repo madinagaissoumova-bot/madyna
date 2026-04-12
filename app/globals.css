@@ -1620,9 +1620,10 @@ body::after {
   }
 
   .header-inner {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.55rem;
+    row-gap: 0.7rem;
   }
 
   .header-actions {
@@ -1756,17 +1757,23 @@ body::after {
   }
 
   .site-nav ul {
+    justify-content: flex-start;
     gap: 0.7rem;
+  }
+
+  .site-nav li {
+    width: auto;
   }
 
   .site-nav a {
     font-size: 1rem;
     display: block;
-    width: 100%;
+    width: auto;
     padding: 0.8rem 0.9rem;
     border-radius: 16px;
     background: rgba(255,255,255,.6);
     border: 1px solid rgba(169,138,116,.1);
+    white-space: nowrap;
   }
 
   .site-nav a::after {
