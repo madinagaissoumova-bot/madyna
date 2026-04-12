@@ -685,9 +685,18 @@ body::after {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.boutique-products-grid {
+  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  gap: 1.7rem;
+  align-items: stretch;
+}
+
 .product-card {
   position: relative;
   overflow: hidden;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
   border-radius: 30px;
   background: rgba(255, 251, 246, 0.86);
   border: 1px solid rgba(169, 138, 116, 0.14);
@@ -707,7 +716,14 @@ body::after {
   display: block;
 }
 
+.product-card-link {
+  overflow: hidden;
+}
+
 .product-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   padding: 1.45rem;
 }
 
@@ -745,6 +761,15 @@ body::after {
   line-height: 1;
 }
 
+.product-description {
+  display: -webkit-box;
+  min-height: 4.8rem;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
 .product-body p:last-of-type {
   color: var(--color-muted);
 }
@@ -770,6 +795,20 @@ body::after {
   justify-content: flex-end;
   gap: 0.7rem;
   flex-wrap: wrap;
+}
+
+.product-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(169, 138, 116, 0.12);
+}
+
+.boutique-section .section-heading {
+  margin-bottom: 2.6rem;
+}
+
+.boutique-section .products-toolbar {
+  margin-bottom: 2.2rem;
 }
 
 .product-detail-link {

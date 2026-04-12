@@ -21,7 +21,7 @@ export default function ProductCard({ product, isEnglish, formatPrice, onAddToCa
             {product.name}
           </Link>
         </h3>
-        <p>{isEnglish ? product.descriptionEn || product.description : product.description}</p>
+        <p className="product-description">{isEnglish ? product.descriptionEn || product.description : product.description}</p>
         <div className="product-footer">
           <div className="product-price-block">
             <strong>{formatPrice(product.price)}</strong>

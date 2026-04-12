@@ -42,7 +42,7 @@ export default function BoutiqueSection({
   }
 
   return (
-    <section className="products section" id={sectionId}>
+    <section className="products section boutique-section" id={sectionId}>
       <div className="container">
         <SectionHeading eyebrow={eyebrow} title={heading} description={description} />
 
@@ -64,7 +64,7 @@ export default function BoutiqueSection({
           </div>
         ) : null}
 
-        <div className="products-grid">
+        <div className="products-grid boutique-products-grid">
           {displayedProducts.map((product) => (
             <ProductCard
               key={product.id}
