@@ -1,54 +1,61 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { isValidEmail } from "../lib/validators";
 import SectionHeading from "./SectionHeading";
 import { useStore } from "./StoreProvider";
 
 const CONTACT_STORAGE_KEY = "mady-mode-contact-form";
+const EMPTY_CONTACT_FORM = {
+  name: "",
+  email: "",
+  subject: "",
+  message: ""
+};
+
+function getStoredContactForm() {
+  if (typeof window === "undefined") {
+    return EMPTY_CONTACT_FORM;
+  }
+
+  const storedForm = window.localStorage.getItem(CONTACT_STORAGE_KEY);
+
+  if (!storedForm) {
+    return EMPTY_CONTACT_FORM;
+  }
+
+  try {
+    const parsedForm = JSON.parse(storedForm);
+    return {
+      name: typeof parsedForm.name === "string" ? parsedForm.name : "",
+      email: typeof parsedForm.email === "string" ? parsedForm.email : "",
+      subject: typeof parsedForm.subject === "string" ? parsedForm.subject : "",
+      message: typeof parsedForm.message === "string" ? parsedForm.message : ""
+    };
+  } catch {
+    window.localStorage.removeItem(CONTACT_STORAGE_KEY);
+    return EMPTY_CONTACT_FORM;
+  }
+}
 
 export default function ContactSection() {
   const { language, showToast } = useStore();
   const isEnglish = language === "en";
   const [contactMessage, setContactMessage] = useState({ text: "", type: "" });
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
-  });
-
-  useEffect(() => {
-    const storedForm = window.localStorage.getItem(CONTACT_STORAGE_KEY);
-
-    if (!storedForm) {
-      return;
-    }
-
-    try {
-      const parsedForm = JSON.parse(storedForm);
-      setFormValues({
-        name: typeof parsedForm.name === "string" ? parsedForm.name : "",
-        email: typeof parsedForm.email === "string" ? parsedForm.email : "",
-        subject: typeof parsedForm.subject === "string" ? parsedForm.subject : "",
-        message: typeof parsedForm.message === "string" ? parsedForm.message : ""
-      });
-    } catch {
-      window.localStorage.removeItem(CONTACT_STORAGE_KEY);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(formValues));
-  }, [formValues]);
+  const [formValues, setFormValues] = useState(getStoredContactForm);
 
   function handleFieldChange(event) {
     const { name, value } = event.target;
 
-    setFormValues((currentValues) => ({
-      ...currentValues,
-      [name]: value
-    }));
+    setFormValues((currentValues) => {
+      const nextValues = {
+        ...currentValues,
+        [name]: value
+      };
+
+      window.localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(nextValues));
+      return nextValues;
+    });
   }
 
   function handleContactSubmit(event) {
@@ -69,12 +76,7 @@ export default function ContactSection() {
       return;
     }
 
-    setFormValues({
-      name: "",
-      email: "",
-      subject: "",
-      message: ""
-    });
+    setFormValues(EMPTY_CONTACT_FORM);
     window.localStorage.removeItem(CONTACT_STORAGE_KEY);
     setContactMessage({
       text: isEnglish
