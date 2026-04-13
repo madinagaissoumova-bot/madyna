@@ -962,7 +962,7 @@ body::after {
   overflow: hidden;
   border-radius: 26px;
   background: rgba(246, 239, 231, 0.84);
-  min-height: 500px;
+  min-height: 440px;
 }
 
 .product-detail-image {
@@ -1101,7 +1101,7 @@ body::after {
   }
 
   .product-gallery-main {
-    min-height: 420px;
+    min-height: 380px;
   }
 
 }
@@ -1878,7 +1878,7 @@ body::after {
   }
 
   .product-gallery-main {
-    min-height: 360px;
+    min-height: 320px;
     border-radius: 22px;
   }
 
