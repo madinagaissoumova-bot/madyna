@@ -136,7 +136,7 @@ export default function AccountPage() {
                     ? "Choose the option that suits you best to validate your cart and continue your order."
                     : "Choisissez l'option qui vous convient pour valider votre panier et poursuivre votre commande."
                   : isEnglish
-                    ? "Find your Mady Mode selection, complete your request and contact the boutique more easily."
+                    ? "Find your Mady Mode selection, complete your request and get in touch with the boutique more easily."
                     : "Retrouvez votre selection Mady Mode, finalisez votre demande et echangez plus facilement avec la boutique."}
               </p>
             </div>
