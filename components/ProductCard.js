@@ -27,7 +27,7 @@ export default function ProductCard({ product, isEnglish, formatPrice, onAddToCa
         <div className="product-footer">
           <div className="product-price-block">
             <strong>{formatPrice(product.price)}</strong>
-            <span>{isEnglish ? "Size guidance on request" : "Conseil taille sur demande"}</span>
+            <span>{isEnglish ? "One size" : "Taille unique"}</span>
           </div>
           <div className="product-card-actions">
             <Link href={`/produit/${product.id}`} className="button button-secondary product-detail-link">
