@@ -1113,7 +1113,7 @@ body::after {
 }
 
 .product-main {
-  padding-top: calc(var(--header-height) - 0.55rem);
+  padding-top: calc(var(--header-height) + 0.2rem);
   padding-bottom: 3rem;
 }
 
@@ -1290,7 +1290,7 @@ body::after {
   }
 
   .product-main {
-    padding-top: calc(var(--header-height) - 0.45rem);
+    padding-top: calc(var(--header-height) + 0.25rem);
     padding-bottom: 2.5rem;
   }
 
@@ -1992,7 +1992,7 @@ body::after {
   }
 
   .product-main {
-    padding-top: calc(var(--header-height) - 2rem);
+    padding-top: calc(var(--header-height) - 0.9rem);
   }
 
   .product-detail-section {
