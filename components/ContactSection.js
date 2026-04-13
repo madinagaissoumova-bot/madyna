@@ -1,21 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isValidEmail } from "../lib/validators";
 import SectionHeading from "./SectionHeading";
 import { useStore } from "./StoreProvider";
+
+const CONTACT_STORAGE_KEY = "mady-mode-contact-form";
 
 export default function ContactSection() {
   const { language, showToast } = useStore();
   const isEnglish = language === "en";
   const [contactMessage, setContactMessage] = useState({ text: "", type: "" });
+  const [formValues, setFormValues] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  useEffect(() => {
+    const storedForm = window.localStorage.getItem(CONTACT_STORAGE_KEY);
+
+    if (!storedForm) {
+      return;
+    }
+
+    try {
+      const parsedForm = JSON.parse(storedForm);
+      setFormValues({
+        name: typeof parsedForm.name === "string" ? parsedForm.name : "",
+        email: typeof parsedForm.email === "string" ? parsedForm.email : "",
+        subject: typeof parsedForm.subject === "string" ? parsedForm.subject : "",
+        message: typeof parsedForm.message === "string" ? parsedForm.message : ""
+      });
+    } catch {
+      window.localStorage.removeItem(CONTACT_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(CONTACT_STORAGE_KEY, JSON.stringify(formValues));
+  }, [formValues]);
+
+  function handleFieldChange(event) {
+    const { name, value } = event.target;
+
+    setFormValues((currentValues) => ({
+      ...currentValues,
+      [name]: value
+    }));
+  }
 
   function handleContactSubmit(event) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
     const entries = ["name", "email", "subject", "message"];
     const isValid = entries.every((field) => {
-      const value = String(formData.get(field) || "").trim();
+      const value = String(formValues[field] || "").trim();
       return field === "email" ? isValidEmail(value) : Boolean(value);
     });
 
@@ -29,7 +69,13 @@ export default function ContactSection() {
       return;
     }
 
-    event.currentTarget.reset();
+    setFormValues({
+      name: "",
+      email: "",
+      subject: "",
+      message: ""
+    });
+    window.localStorage.removeItem(CONTACT_STORAGE_KEY);
     setContactMessage({
       text: isEnglish
         ? "Your message has been sent. We will get back to you very soon."
@@ -58,11 +104,11 @@ export default function ContactSection() {
 
         <form className="contact-form" onSubmit={handleContactSubmit} noValidate>
           <div className="form-row">
-            <div className="form-field"><label htmlFor="name">{isEnglish ? "Full name" : "Nom complet"}</label><input type="text" id="name" name="name" required /></div>
-            <div className="form-field"><label htmlFor="email">{isEnglish ? "Email address" : "Adresse e-mail"}</label><input type="email" id="email" name="email" required /></div>
+            <div className="form-field"><label htmlFor="name">{isEnglish ? "Full name" : "Nom complet"}</label><input type="text" id="name" name="name" value={formValues.name} onChange={handleFieldChange} required /></div>
+            <div className="form-field"><label htmlFor="email">{isEnglish ? "Email address" : "Adresse e-mail"}</label><input type="email" id="email" name="email" value={formValues.email} onChange={handleFieldChange} required /></div>
           </div>
-          <div className="form-field"><label htmlFor="subject">{isEnglish ? "Subject" : "Sujet"}</label><input type="text" id="subject" name="subject" required /></div>
-          <div className="form-field"><label htmlFor="message">{isEnglish ? "Message" : "Message"}</label><textarea id="message" name="message" rows="6" placeholder={isEnglish ? "Describe your request..." : "Decrivez votre demande..."} required></textarea></div>
+          <div className="form-field"><label htmlFor="subject">{isEnglish ? "Subject" : "Sujet"}</label><input type="text" id="subject" name="subject" value={formValues.subject} onChange={handleFieldChange} required /></div>
+          <div className="form-field"><label htmlFor="message">{isEnglish ? "Message" : "Message"}</label><textarea id="message" name="message" rows="6" value={formValues.message} onChange={handleFieldChange} placeholder={isEnglish ? "Describe your request..." : "Decrivez votre demande..."} required></textarea></div>
           <button type="submit" className="button button-primary">{isEnglish ? "Send message" : "Envoyer le message"}</button>
           <p className={`form-message${contactMessage.type ? ` ${contactMessage.type}` : ""}`} aria-live="polite">
             {contactMessage.text}
