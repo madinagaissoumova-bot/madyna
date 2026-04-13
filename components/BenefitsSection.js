@@ -29,7 +29,7 @@ export default function BenefitsSection() {
           <article className="benefit-card"><h3>{isEnglish ? "Selected fabrics" : "Matieres choisies"}</h3><p>{isEnglish ? "Elegant drape fabrics, comfortable to wear and pleasant all day long." : "Des tissus au tombe elegant, confortables a porter et agreables toute la journee."}</p></article>
           <article className="benefit-card"><h3>{isEnglish ? "Careful finishes" : "Finitions soignees"}</h3><p>{isEnglish ? "Clean seams, refined palettes and harmonious cuts for an impeccable look." : "Coutures nettes, palettes raffinees et coupes harmonieuses pour une allure irreprochable."}</p></article>
           <article className="benefit-card"><h3>{isEnglish ? "Personal advice" : "Conseil personalise"}</h3><p>{isEnglish ? "A team available to guide you according to your style, size and preferences." : "Une equipe disponible pour vous guider selon votre style, votre taille et vos envies."}</p></article>
-          <article className="benefit-card"><h3>{isEnglish ? "Careful shipping" : "Expedition delicate"}</h3><p>{isEnglish ? "Your pieces are prepared with care in a refined and elegant package." : "Vos pieces sont preparees avec attention dans un ecrin sobre et elegant."}</p></article>
+          <article className="benefit-card"><h3>{isEnglish ? "Careful shipping" : "Expedition soignee"}</h3><p>{isEnglish ? "Your pieces are prepared with care in a refined and elegant package." : "Vos pieces sont preparees avec attention dans un ecrin sobre et elegant."}</p></article>
         </div>
       </div>
     </section>

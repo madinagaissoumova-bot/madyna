@@ -12,7 +12,7 @@ export default function HomePage() {
   const isEnglish = language === "en";
   const [heroIndex, setHeroIndex] = useState(0);
   const heroTitle = isEnglish
-    ? "Abayas with a couture spirit, created for a refined and understated presence."
+    ? "Modest elegance"
     : "L'élégance modeste";
   const heroDescription = isEnglish
     ? "Fluid silhouettes, beautiful fabrics and refined finishes imagined for a modern, elegant presence."
