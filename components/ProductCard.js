@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 
-export default function ProductCard({ product, isEnglish, formatPrice, onAddToCart }) {
+export default function ProductCard({ product, isEnglish, formatPrice, onAddToCart, variant = "default" }) {
+  const isRelated = variant === "related";
+
   return (
-    <article className="product-card">
+    <article className={`product-card${isRelated ? " product-card-related" : ""}`}>
       <Link href={`/produit/${product.id}`} className="product-card-link" aria-label={`Voir la fiche de ${product.name}`}>
         <div
           className="product-visual"
@@ -29,7 +31,7 @@ export default function ProductCard({ product, isEnglish, formatPrice, onAddToCa
           </div>
           <div className="product-card-actions">
             <Link href={`/produit/${product.id}`} className="button button-secondary product-detail-link">
-              {isEnglish ? "View product" : "Voir le produit"}
+              {isRelated ? (isEnglish ? "Open" : "Ouvrir") : (isEnglish ? "View product" : "Voir le produit")}
             </Link>
             <button className="add-to-cart" type="button" onClick={() => onAddToCart(product)}>
               {isEnglish ? "Add" : "Ajouter"}

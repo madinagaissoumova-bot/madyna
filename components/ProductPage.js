@@ -142,7 +142,7 @@ export default function ProductPage({ product }) {
                 </p>
               </div>
 
-              <div className="products-grid">
+              <div className="products-grid related-products-grid">
                 {relatedProducts.map((relatedProduct) => (
                   <ProductCard
                     key={relatedProduct.id}
@@ -150,6 +150,7 @@ export default function ProductPage({ product }) {
                     isEnglish={isEnglish}
                     formatPrice={formatPrice}
                     onAddToCart={handleAddRelatedProductToCart}
+                    variant="related"
                   />
                 ))}
               </div>
