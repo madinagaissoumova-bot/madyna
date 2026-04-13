@@ -16,7 +16,6 @@ export default function ProductCard({ product, isEnglish, formatPrice, onAddToCa
       <div className="product-body">
         <div className="product-head">
           <p className="product-category">{isEnglish ? product.categoryEn || product.category : product.category}</p>
-          <span className="product-badge">{isEnglish ? "Available" : "Disponible"}</span>
         </div>
         <h3>
           <Link href={`/produit/${product.id}`} className="product-title-link">

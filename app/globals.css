@@ -750,34 +750,12 @@ body::after {
 .product-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 0.8rem;
-  flex-wrap: nowrap;
   margin-bottom: 0.65rem;
 }
 
 .product-category {
   margin: 0;
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.product-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-  flex: 0 0 auto;
-  min-height: 2rem;
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  background: rgba(201, 172, 149, 0.12);
-  color: var(--color-accent-deep);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .product-body h3 {
@@ -2011,10 +1989,6 @@ body::after {
     width: 42px;
     height: 42px;
     background: rgba(255, 250, 244, 0.9);
-  }
-
-  .product-badge {
-    white-space: normal;
   }
 
   .product-copy-card h1 {
