@@ -142,7 +142,7 @@ export default function ProductPage({ product }) {
                 </p>
               </div>
 
-              <div className="products-grid">
+              <div className="products-grid boutique-products-grid">
                 {relatedProducts.map((relatedProduct) => (
                   <ProductCard
                     key={relatedProduct.id}
