@@ -56,11 +56,16 @@ export default function ConfirmationPage() {
         }
       />
 
-      <main className="auth-main">
+      <main className="auth-main" id="main-content">
         <section className="auth-section confirmation-section">
           <div className="container auth-shell confirmation-shell">
             <div className="auth-copy">
               <p className="eyebrow">{isEnglish ? "Order confirmed" : "Commande confirmee"}</p>
+              <div className="checkout-steps" aria-label={isEnglish ? "Checkout steps" : "Etapes de commande"}>
+                <span className="checkout-step is-complete">{isEnglish ? "1. Account" : "1. Compte"}</span>
+                <span className="checkout-step is-active">{isEnglish ? "2. Delivery" : "2. Livraison"}</span>
+                <span className="checkout-step">{isEnglish ? "3. Confirmation" : "3. Confirmation"}</span>
+              </div>
               <h1>{isEnglish ? "Your request is ready" : "Votre demande est prete"}</h1>
               <p>
                 {isEnglish
@@ -107,29 +112,29 @@ export default function ConfirmationPage() {
                 <div className="form-row">
                   <div className="form-field">
                     <label htmlFor="delivery-firstname">{isEnglish ? "First name" : "Prenom"}</label>
-                    <input type="text" id="delivery-firstname" name="delivery-firstname" required />
+                    <input type="text" id="delivery-firstname" name="delivery-firstname" autoComplete="given-name" required />
                   </div>
                   <div className="form-field">
                     <label htmlFor="delivery-lastname">{isEnglish ? "Last name" : "Nom"}</label>
-                    <input type="text" id="delivery-lastname" name="delivery-lastname" required />
+                    <input type="text" id="delivery-lastname" name="delivery-lastname" autoComplete="family-name" required />
                   </div>
                 </div>
                 <div className="form-field">
                   <label htmlFor="delivery-phone">{isEnglish ? "Phone" : "Telephone"}</label>
-                  <input type="tel" id="delivery-phone" name="delivery-phone" required />
+                  <input type="tel" id="delivery-phone" name="delivery-phone" autoComplete="tel" required />
                 </div>
                 <div className="form-field">
                   <label htmlFor="delivery-address">{isEnglish ? "Full address" : "Adresse complete"}</label>
-                  <textarea id="delivery-address" name="delivery-address" rows="4" placeholder={isEnglish ? "Street, number, additional details..." : "Rue, numero, complement..."} required></textarea>
+                  <textarea id="delivery-address" name="delivery-address" rows="4" autoComplete="street-address" placeholder={isEnglish ? "Street, number, additional details..." : "Rue, numero, complement..."} required></textarea>
                 </div>
                 <div className="form-row">
                   <div className="form-field">
                     <label htmlFor="delivery-city">{isEnglish ? "City" : "Ville"}</label>
-                    <input type="text" id="delivery-city" name="delivery-city" required />
+                    <input type="text" id="delivery-city" name="delivery-city" autoComplete="address-level2" required />
                   </div>
                   <div className="form-field">
                     <label htmlFor="delivery-postal">{isEnglish ? "Postal code" : "Code postal"}</label>
-                    <input type="text" id="delivery-postal" name="delivery-postal" required />
+                    <input type="text" id="delivery-postal" name="delivery-postal" autoComplete="postal-code" required />
                   </div>
                 </div>
                 <div className="form-field">
@@ -141,6 +146,11 @@ export default function ConfirmationPage() {
                     <option value="pickup">{isEnglish ? "Store pickup" : "Retrait boutique"}</option>
                   </select>
                 </div>
+                <p className="delivery-helper-text">
+                  {isEnglish
+                    ? "Save your information first, then share your request with the boutique to finalize the order."
+                    : "Enregistrez d'abord vos informations, puis partagez votre demande avec la boutique pour finaliser la commande."}
+                </p>
                 <button className="button button-primary" type="submit">{isEnglish ? "Save information" : "Enregistrer les informations"}</button>
                 <p className={`form-message${message.type ? ` ${message.type}` : ""}`} aria-live="polite">
                   {message.text}

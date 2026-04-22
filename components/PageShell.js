@@ -11,7 +11,9 @@ export default function PageShell({ children, mainClassName = "page-main" }) {
   return (
     <>
       <SiteNavbar sticky navItems={getMainNavItems(isEnglish)} />
-      <main className={mainClassName}>{children}</main>
+      <main className={mainClassName} id="main-content">
+        {children}
+      </main>
     </>
   );
 }

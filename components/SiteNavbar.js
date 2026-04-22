@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import LanguageToggle from "./LanguageToggle";
 import HeaderCommerceActions from "./HeaderCommerceActions";
 
@@ -15,6 +16,8 @@ export default function SiteNavbar({
   const isControlled = typeof mobileOpen === "boolean" && typeof onMobileOpenChange === "function";
   const [internalMobileOpen, setInternalMobileOpen] = useState(false);
   const currentMobileOpen = isControlled ? mobileOpen : internalMobileOpen;
+  const pathname = usePathname();
+  const firstNavLinkRef = useRef(null);
 
   function setMenuOpen(value) {
     if (isControlled) {
@@ -40,6 +43,16 @@ export default function SiteNavbar({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [currentMobileOpen]);
 
+  useEffect(() => {
+    document.body.classList.toggle("menu-open", currentMobileOpen);
+
+    if (currentMobileOpen) {
+      firstNavLinkRef.current?.focus();
+    }
+
+    return () => document.body.classList.remove("menu-open");
+  }, [currentMobileOpen]);
+
   return (
     <header className={`site-header${sticky ? " auth-header" : ""}`} id="top">
       <div className="container header-inner">
@@ -54,7 +67,7 @@ export default function SiteNavbar({
         <button
           className="nav-toggle"
           type="button"
-          aria-label="Ouvrir le menu"
+          aria-label={currentMobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={currentMobileOpen}
           aria-controls="site-nav"
           onClick={() => setMenuOpen(!currentMobileOpen)}
@@ -66,10 +79,12 @@ export default function SiteNavbar({
 
         <nav className={`site-nav${currentMobileOpen ? " is-open" : ""}`} id="site-nav" aria-label="Navigation principale">
           <ul>
-            {navItems.map((item) => (
+            {navItems.map((item, index) => (
               <li key={`${item.href}-${item.label}`}>
                 <Link
                   href={item.href}
+                  ref={index === 0 ? firstNavLinkRef : undefined}
+                  aria-current={pathname === item.href ? "page" : undefined}
                   onClick={(event) => {
                     item.onClick?.(event);
                     setMenuOpen(false);
@@ -85,9 +100,14 @@ export default function SiteNavbar({
         <div className="header-actions">
           <LanguageToggle />
           <HeaderCommerceActions />
-          {actions}
+          {actions ? <div className="header-extra-actions">{actions}</div> : null}
         </div>
       </div>
+      <div
+        className={`site-nav-overlay${currentMobileOpen ? " is-visible" : ""}`}
+        aria-hidden={!currentMobileOpen}
+        onClick={() => setMenuOpen(false)}
+      ></div>
     </header>
   );
 }

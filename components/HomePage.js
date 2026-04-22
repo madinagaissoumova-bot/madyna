@@ -30,7 +30,7 @@ export default function HomePage() {
     <>
       <SiteNavbar sticky navItems={getMainNavItems(isEnglish)} />
 
-      <main className="page-main home-main">
+      <main className="page-main home-main" id="main-content">
         <section className="hero section home-landing home-landing-desktop">
           <div className="container home-landing-grid">
             <div className="home-landing-visual">

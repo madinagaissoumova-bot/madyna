@@ -55,7 +55,7 @@ export default function ProductPage({ product }) {
         navItems={getMainNavItems(isEnglish)}
       />
 
-      <main className="product-main">
+      <main className="product-main" id="main-content">
         <section className="product-detail-section">
           <div className="container product-detail-grid">
             <div className="product-gallery-card">
@@ -108,6 +108,11 @@ export default function ProductPage({ product }) {
               <p className="product-detail-category">{isEnglish ? product.categoryEn || product.category : product.category}</p>
               <h1>{product.name}</h1>
               <p className="product-detail-price">{formatPrice(product.price)}</p>
+              <div className="product-reassurance">
+                <span>{isEnglish ? "Boutique assistance available" : "Accompagnement boutique disponible"}</span>
+                <span>{isEnglish ? "Fast order confirmation" : "Confirmation rapide"}</span>
+                <span>{isEnglish ? "Careful follow-up" : "Suivi soigne"}</span>
+              </div>
               <p className="product-detail-description">{isEnglish ? product.descriptionEn || product.description : product.description}</p>
               <p className="product-detail-description">
                 {isEnglish
@@ -125,6 +130,11 @@ export default function ProductPage({ product }) {
                   {isEnglish ? "Continue shopping" : "Continuer vos achats"}
                 </Link>
               </div>
+              <p className="product-detail-helper">
+                {isEnglish
+                  ? "Add this piece to your cart, then complete your request in a few clear steps."
+                  : "Ajoutez cette piece au panier, puis finalisez votre demande en quelques etapes claires."}
+              </p>
             </div>
           </div>
         </section>

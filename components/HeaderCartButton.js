@@ -15,6 +15,7 @@ export default function HeaderCartButton() {
           <path d="M3 5h2l2.2 9.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H7.2" />
         </svg>
       </span>
+      <span className="header-button-label">{isEnglish ? "Cart" : "Panier"}</span>
       <span className="cart-count" aria-live="polite">
         {totalQuantity}
       </span>

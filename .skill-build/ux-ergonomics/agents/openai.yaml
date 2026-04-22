@@ -1,0 +1,4 @@
+interface:
+  display_name: "UX Ergonomics"
+  short_description: "Audit and improve user flows"
+  default_prompt: "Use $ux-ergonomics to audit and improve the ergonomics of this interface."

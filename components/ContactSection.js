@@ -43,9 +43,18 @@ export default function ContactSection() {
   const isEnglish = language === "en";
   const [contactMessage, setContactMessage] = useState({ text: "", type: "" });
   const [formValues, setFormValues] = useState(getStoredContactForm);
+  const [invalidFields, setInvalidFields] = useState([]);
 
   function handleFieldChange(event) {
     const { name, value } = event.target;
+
+    if (invalidFields.includes(name)) {
+      setInvalidFields((currentFields) => currentFields.filter((field) => field !== name));
+    }
+
+    if (contactMessage.type === "error") {
+      setContactMessage({ text: "", type: "" });
+    }
 
     setFormValues((currentValues) => {
       const nextValues = {
@@ -61,21 +70,30 @@ export default function ContactSection() {
   function handleContactSubmit(event) {
     event.preventDefault();
     const entries = ["name", "email", "subject", "message"];
-    const isValid = entries.every((field) => {
+    const nextInvalidFields = entries.filter((field) => {
       const value = String(formValues[field] || "").trim();
-      return field === "email" ? isValidEmail(value) : Boolean(value);
+      return field === "email" ? !isValidEmail(value) : !value;
     });
 
-    if (!isValid) {
+    if (nextInvalidFields.length) {
+      setInvalidFields(nextInvalidFields);
       setContactMessage({
         text: isEnglish
           ? "Please complete all form fields correctly."
           : "Merci de completer correctement tous les champs du formulaire.",
         type: "error"
       });
+
+      const firstInvalidField = event.currentTarget.elements.namedItem(nextInvalidFields[0]);
+
+      if (firstInvalidField instanceof HTMLElement) {
+        firstInvalidField.focus();
+      }
+
       return;
     }
 
+    setInvalidFields([]);
     setFormValues(EMPTY_CONTACT_FORM);
     window.localStorage.removeItem(CONTACT_STORAGE_KEY);
     setContactMessage({
@@ -106,13 +124,13 @@ export default function ContactSection() {
 
         <form className="contact-form" onSubmit={handleContactSubmit} noValidate>
           <div className="form-row">
-            <div className="form-field"><label htmlFor="name">{isEnglish ? "Full name" : "Nom complet"}</label><input type="text" id="name" name="name" value={formValues.name} onChange={handleFieldChange} required /></div>
-            <div className="form-field"><label htmlFor="email">{isEnglish ? "Email address" : "Adresse e-mail"}</label><input type="email" id="email" name="email" value={formValues.email} onChange={handleFieldChange} required /></div>
+            <div className="form-field"><label htmlFor="name">{isEnglish ? "Full name" : "Nom complet"}</label><input type="text" id="name" name="name" value={formValues.name} onChange={handleFieldChange} autoComplete="name" aria-invalid={invalidFields.includes("name")} aria-describedby="contact-form-feedback" required /></div>
+            <div className="form-field"><label htmlFor="email">{isEnglish ? "Email address" : "Adresse e-mail"}</label><input type="email" id="email" name="email" value={formValues.email} onChange={handleFieldChange} autoComplete="email" inputMode="email" aria-invalid={invalidFields.includes("email")} aria-describedby="contact-form-feedback" required /></div>
           </div>
-          <div className="form-field"><label htmlFor="subject">{isEnglish ? "Subject" : "Sujet"}</label><input type="text" id="subject" name="subject" value={formValues.subject} onChange={handleFieldChange} required /></div>
-          <div className="form-field"><label htmlFor="message">{isEnglish ? "Message" : "Message"}</label><textarea id="message" name="message" rows="6" value={formValues.message} onChange={handleFieldChange} placeholder={isEnglish ? "Describe your request..." : "Decrivez votre demande..."} required></textarea></div>
+          <div className="form-field"><label htmlFor="subject">{isEnglish ? "Subject" : "Sujet"}</label><input type="text" id="subject" name="subject" value={formValues.subject} onChange={handleFieldChange} autoComplete="off" aria-invalid={invalidFields.includes("subject")} aria-describedby="contact-form-feedback" required /></div>
+          <div className="form-field"><label htmlFor="message">{isEnglish ? "Message" : "Message"}</label><textarea id="message" name="message" rows="6" value={formValues.message} onChange={handleFieldChange} autoComplete="off" aria-invalid={invalidFields.includes("message")} aria-describedby="contact-form-feedback" placeholder={isEnglish ? "Describe your request..." : "Decrivez votre demande..."} required></textarea></div>
           <button type="submit" className="button button-primary">{isEnglish ? "Send message" : "Envoyer le message"}</button>
-          <p className={`form-message${contactMessage.type ? ` ${contactMessage.type}` : ""}`} aria-live="polite">
+          <p id="contact-form-feedback" className={`form-message${contactMessage.type ? ` ${contactMessage.type}` : ""}`} aria-live="polite">
             {contactMessage.text}
           </p>
         </form>

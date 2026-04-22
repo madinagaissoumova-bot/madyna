@@ -25,6 +25,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">
+          Aller au contenu
+        </a>
         <StoreProvider>
           {children}
           <SiteFooter />

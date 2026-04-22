@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Direction"
+  short_description: "Shape stronger visual direction"
+  default_prompt: "Use $design-direction to improve the visual direction of this interface."

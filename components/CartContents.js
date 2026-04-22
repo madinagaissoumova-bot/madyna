@@ -14,19 +14,44 @@ export default function CartContents({ compact = false, onNavigate } = {}) {
     clearCart
   } = useStore();
   const isEnglish = language === "en";
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   if (!cart.length) {
     return (
-      <p className="cart-empty">
-        {isEnglish
-          ? "Your cart is empty for now."
-          : "Votre panier est vide pour le moment."}
-      </p>
+      <div className="cart-empty-state">
+        <p className="cart-empty">
+          {isEnglish
+            ? "Your cart is empty for now."
+            : "Votre panier est vide pour le moment."}
+        </p>
+        <p className="cart-empty-help">
+          {isEnglish
+            ? "Explore the collection and add your favorite pieces before moving to checkout."
+            : "Explorez la collection et ajoutez vos pieces preferees avant de passer a la validation."}
+        </p>
+        <Link href="/boutique" className="button button-primary" onClick={onNavigate}>
+          {isEnglish ? "Discover the collection" : "Decouvrir la collection"}
+        </Link>
+      </div>
     );
   }
 
   return (
     <>
+      <div className="cart-status-card">
+        <div>
+          <p className="cart-status-label">{isEnglish ? "Cart summary" : "Resume du panier"}</p>
+          <strong>
+            {totalItems} {isEnglish ? (totalItems > 1 ? "items" : "item") : totalItems > 1 ? "articles" : "article"}
+          </strong>
+        </div>
+        <p className="cart-status-note">
+          {isEnglish
+            ? "Adjust quantities freely before the next step."
+            : "Ajustez les quantites librement avant l'etape suivante."}
+        </p>
+      </div>
+
       <ul className="cart-items">
         {cart.map((item) => (
           <li className="cart-item" key={item.id}>
@@ -102,6 +127,11 @@ export default function CartContents({ compact = false, onNavigate } = {}) {
             {isEnglish ? "Validate cart" : "Valider le panier"}
           </Link>
         </div>
+        <p className="cart-helper-text">
+          {isEnglish
+            ? "Next step: sign in or create your account, then confirm your delivery details."
+            : "Etape suivante : connectez-vous ou creez votre compte, puis confirmez votre livraison."}
+        </p>
       </div>
     </>
   );

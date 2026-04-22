@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile Responsive"
+  short_description: "Improve mobile layout and flow"
+  default_prompt: "Use $mobile-responsive to improve the mobile version of this interface."

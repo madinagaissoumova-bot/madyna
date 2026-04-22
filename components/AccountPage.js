@@ -116,19 +116,26 @@ export default function AccountPage() {
         navItems={getMainNavItems(isEnglish)}
       />
 
-      <main className="account-main">
+      <main className="account-main" id="main-content">
         <section className="auth-section account-section">
           <div className="container auth-shell">
             <div className="auth-copy">
               <p className="eyebrow">{isEnglish ? "Customer area" : "Espace cliente"}</p>
+              {redirect === "checkout" ? (
+                <div className="checkout-steps" aria-label={isEnglish ? "Checkout steps" : "Etapes de commande"}>
+                  <span className="checkout-step is-active">{isEnglish ? "1. Account" : "1. Compte"}</span>
+                  <span className="checkout-step">{isEnglish ? "2. Delivery" : "2. Livraison"}</span>
+                  <span className="checkout-step">{isEnglish ? "3. Confirmation" : "3. Confirmation"}</span>
+                </div>
+              ) : null}
               <h1>
                 {redirect === "checkout"
                   ? isEnglish
                     ? "Sign in or create an account"
                     : "Connectez-vous ou creez un compte"
                   : isEnglish
-                    ? "Sign in to continue your order"
-                    : "Connectez-vous pour poursuivre votre commande"}
+                    ? "Access your customer area"
+                    : "Accedez a votre espace cliente"}
               </h1>
               <p>
                 {redirect === "checkout"
@@ -136,8 +143,8 @@ export default function AccountPage() {
                     ? "Choose the option that suits you best to validate your cart and continue your order."
                     : "Choisissez l'option qui vous convient pour valider votre panier et poursuivre votre commande."
                   : isEnglish
-                    ? "Find your Mady Mode selection, complete your request and get in touch with the boutique more easily."
-                    : "Retrouvez votre selection Mady Mode, finalisez votre demande et echangez plus facilement avec la boutique."}
+                    ? "Find your Mady Mode details, manage your local account and continue your shopping more easily."
+                    : "Retrouvez vos informations Mady Mode, gerez votre compte local et poursuivez vos achats plus facilement."}
               </p>
             </div>
 
@@ -174,6 +181,7 @@ export default function AccountPage() {
                     type="email"
                     id="account-email"
                     name="account-email"
+                    autoComplete="email"
                     value={formValues.email}
                     onChange={(event) =>
                       setFormValues((currentValues) => ({
@@ -190,6 +198,7 @@ export default function AccountPage() {
                     type="password"
                     id="account-password"
                     name="account-password"
+                    autoComplete={accountMode === "create" ? "new-password" : "current-password"}
                     value={formValues.password}
                     onChange={(event) =>
                       setFormValues((currentValues) => ({
@@ -213,6 +222,15 @@ export default function AccountPage() {
                   {message.text}
                 </p>
               </form>
+              <p className="auth-helper-text">
+                {redirect === "checkout"
+                  ? isEnglish
+                    ? "After this step, you will confirm your delivery information."
+                    : "Apres cette etape, vous confirmerez vos informations de livraison."
+                  : isEnglish
+                    ? "This local account stays available on this device for a faster return."
+                    : "Ce compte local reste disponible sur cet appareil pour un retour plus rapide."}
+              </p>
               <div className="auth-footer-note">
                 <button
                   type="button"
