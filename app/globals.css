@@ -1355,6 +1355,8 @@ body::after {
     width: 100%;
     aspect-ratio: 4 / 5;
     overflow: hidden;
+    touch-action: pan-y;
+    user-select: none;
     border-radius: 24px;
     background: linear-gradient(145deg, rgba(255,251,246,.96), rgba(232,220,208,.9));
     border: 1px solid rgba(188,161,140,.18);

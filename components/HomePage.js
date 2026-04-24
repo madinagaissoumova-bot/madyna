@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SiteNavbar from "./SiteNavbar";
 import { getMainNavItems } from "../lib/siteContent";
 import { heroSlides } from "../lib/store";
@@ -11,6 +11,7 @@ export default function HomePage() {
   const { language } = useStore();
   const isEnglish = language === "en";
   const [heroIndex, setHeroIndex] = useState(0);
+  const touchStartXRef = useRef(null);
   const heroTitle = isEnglish
     ? "Modest elegance"
     : "L'élégance modeste";
@@ -25,6 +26,39 @@ export default function HomePage() {
 
     return () => window.clearInterval(intervalId);
   }, []);
+
+  function goToPreviousSlide() {
+    setHeroIndex((currentIndex) => (currentIndex - 1 + heroSlides.length) % heroSlides.length);
+  }
+
+  function goToNextSlide() {
+    setHeroIndex((currentIndex) => (currentIndex + 1) % heroSlides.length);
+  }
+
+  function handleTouchStart(event) {
+    touchStartXRef.current = event.touches[0]?.clientX ?? null;
+  }
+
+  function handleTouchEnd(event) {
+    if (touchStartXRef.current === null) {
+      return;
+    }
+
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartXRef.current;
+    const deltaX = touchStartXRef.current - touchEndX;
+    touchStartXRef.current = null;
+
+    if (Math.abs(deltaX) < 40) {
+      return;
+    }
+
+    if (deltaX > 0) {
+      goToNextSlide();
+      return;
+    }
+
+    goToPreviousSlide();
+  }
 
   return (
     <>
@@ -51,7 +85,7 @@ export default function HomePage() {
                     type="button"
                     className="hero-control"
                     aria-label={isEnglish ? "Previous image" : "Image precedente"}
-                    onClick={() => setHeroIndex((heroIndex - 1 + heroSlides.length) % heroSlides.length)}
+                    onClick={goToPreviousSlide}
                   >
                     ‹
                   </button>
@@ -70,7 +104,7 @@ export default function HomePage() {
                     type="button"
                     className="hero-control"
                     aria-label={isEnglish ? "Next image" : "Image suivante"}
-                    onClick={() => setHeroIndex((heroIndex + 1) % heroSlides.length)}
+                    onClick={goToNextSlide}
                   >
                     ›
                   </button>
@@ -133,7 +167,11 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="home-landing-mobile-visual">
+            <div
+              className="home-landing-mobile-visual"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               <div className="home-carousel-frame home-carousel-frame-mobile">
                 <div className="home-carousel-shell">
                   {heroSlides.map((slide, index) => (
